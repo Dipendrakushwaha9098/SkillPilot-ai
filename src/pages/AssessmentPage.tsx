@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Brain, Code, Database, Smartphone, Bot, Briefcase, Rocket, Clock } from "lucide-react";
+import { ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const steps = [
   {
@@ -49,7 +50,8 @@ const steps = [
 const AssessmentPage = () => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const { setAssessment, generateRoadmap } = useAuth();
+  const [generating, setGenerating] = useState(false);
+  const { setAssessment, setRoadmapDirectly } = useAuth();
   const navigate = useNavigate();
 
   const current = steps[step];
@@ -59,7 +61,7 @@ const AssessmentPage = () => {
     setAnswers(prev => ({ ...prev, [current.key]: value }));
   };
 
-  const next = () => {
+  const next = async () => {
     if (!selected) { toast.error("Please select an option"); return; }
     if (step < steps.length - 1) {
       setStep(step + 1);
@@ -71,9 +73,25 @@ const AssessmentPage = () => {
         dailyTime: answers.dailyTime,
       };
       setAssessment(assessment);
-      generateRoadmap(assessment);
-      toast.success("Your roadmap is ready!");
-      navigate("/dashboard");
+      setGenerating(true);
+
+      try {
+        const { data, error } = await supabase.functions.invoke("generate-roadmap", {
+          body: assessment,
+        });
+
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
+
+        setRoadmapDirectly(data);
+        toast.success("Your AI-powered roadmap is ready!");
+        navigate("/dashboard");
+      } catch (e: any) {
+        console.error("Roadmap generation failed:", e);
+        toast.error(e.message || "Failed to generate roadmap. Please try again.");
+      } finally {
+        setGenerating(false);
+      }
     }
   };
 
@@ -97,48 +115,62 @@ const AssessmentPage = () => {
           </div>
         </div>
 
-        <AnimatePresence mode="wait">
+        {generating ? (
           <motion.div
-            key={step}
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center gap-4 py-20"
           >
-            <h1 className="mb-8 text-center font-display text-3xl font-bold">{current.question}</h1>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {current.options.map(opt => (
-                <button
-                  key={opt.value}
-                  onClick={() => selectOption(opt.value)}
-                  className={`group rounded-2xl border-2 p-5 text-left transition-all ${
-                    selected === opt.value
-                      ? "border-primary bg-primary/5 shadow-elevated"
-                      : "border-border bg-card hover:border-primary/30 hover:shadow-card"
-                  }`}
-                >
-                  <div className="mb-2 text-3xl">{opt.icon}</div>
-                  <div className="font-display font-semibold">{opt.label}</div>
-                  <div className="mt-1 text-sm text-muted-foreground">{opt.desc}</div>
-                </button>
-              ))}
-            </div>
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <h2 className="font-display text-2xl font-bold">AI is crafting your roadmap...</h2>
+            <p className="text-muted-foreground">Analyzing your profile and generating a personalized learning path</p>
           </motion.div>
-        </AnimatePresence>
+        ) : (
+          <>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={step}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h1 className="mb-8 text-center font-display text-3xl font-bold">{current.question}</h1>
 
-        <div className="mt-8 flex items-center justify-between">
-          <Button
-            variant="ghost"
-            onClick={() => setStep(Math.max(0, step - 1))}
-            disabled={step === 0}
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back
-          </Button>
-          <Button variant="hero" onClick={next}>
-            {step === steps.length - 1 ? "Generate Roadmap" : "Continue"} <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {current.options.map(opt => (
+                    <button
+                      key={opt.value}
+                      onClick={() => selectOption(opt.value)}
+                      className={`group rounded-2xl border-2 p-5 text-left transition-all ${
+                        selected === opt.value
+                          ? "border-primary bg-primary/5 shadow-elevated"
+                          : "border-border bg-card hover:border-primary/30 hover:shadow-card"
+                      }`}
+                    >
+                      <div className="mb-2 text-3xl">{opt.icon}</div>
+                      <div className="font-display font-semibold">{opt.label}</div>
+                      <div className="mt-1 text-sm text-muted-foreground">{opt.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            <div className="mt-8 flex items-center justify-between">
+              <Button
+                variant="ghost"
+                onClick={() => setStep(Math.max(0, step - 1))}
+                disabled={step === 0}
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" /> Back
+              </Button>
+              <Button variant="hero" onClick={next}>
+                {step === steps.length - 1 ? "Generate AI Roadmap" : "Continue"} <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

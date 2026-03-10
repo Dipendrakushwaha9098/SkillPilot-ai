@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
-import { Brain, Eye, EyeOff } from "lucide-react";
+import { Brain, Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 const SignupPage = () => {
@@ -12,16 +12,23 @@ const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { signup } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !password) { toast.error("Please fill all fields"); return; }
     if (password.length < 6) { toast.error("Password must be at least 6 characters"); return; }
-    signup(name, email, password);
-    toast.success("Account created!");
-    navigate("/assessment");
+    setLoading(true);
+    const result = await signup(name, email, password);
+    setLoading(false);
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      toast.success("Account created! Please check your email to verify your account.");
+      navigate("/login");
+    }
   };
 
   return (
@@ -53,7 +60,9 @@ const SignupPage = () => {
               </button>
             </div>
           </div>
-          <Button type="submit" variant="hero" className="w-full">Create Account</Button>
+          <Button type="submit" variant="hero" className="w-full" disabled={loading}>
+            {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account...</> : "Create Account"}
+          </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">

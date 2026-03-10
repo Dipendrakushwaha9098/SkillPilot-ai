@@ -4,22 +4,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
-import { Brain, Eye, EyeOff } from "lucide-react";
+import { Brain, Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) { toast.error("Please fill all fields"); return; }
-    login(email, password);
-    toast.success("Welcome back!");
-    navigate("/dashboard");
+    setLoading(true);
+    const result = await login(email, password);
+    setLoading(false);
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      toast.success("Welcome back!");
+      navigate("/dashboard");
+    }
   };
 
   return (
@@ -47,7 +54,9 @@ const LoginPage = () => {
               </button>
             </div>
           </div>
-          <Button type="submit" variant="hero" className="w-full">Log In</Button>
+          <Button type="submit" variant="hero" className="w-full" disabled={loading}>
+            {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...</> : "Log In"}
+          </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">

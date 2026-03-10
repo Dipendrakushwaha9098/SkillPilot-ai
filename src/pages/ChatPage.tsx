@@ -5,6 +5,7 @@ import { Send, Bot, User, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   role: "user" | "assistant";
@@ -22,11 +23,17 @@ async function streamChat({
   onDelta: (deltaText: string) => void;
   onDone: () => void;
 }) {
+  // Get the current session token
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.access_token) {
+    throw new Error("You must be logged in to use the AI mentor.");
+  }
+
   const resp = await fetch(CHAT_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      Authorization: `Bearer ${session.access_token}`,
     },
     body: JSON.stringify({ messages }),
   });

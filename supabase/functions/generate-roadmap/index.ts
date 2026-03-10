@@ -57,7 +57,14 @@ serve(async (req) => {
 - Goal: ${goal}
 - Daily Study Time: ${dailyTime}
 
-Generate a structured roadmap with 6-10 topics. Each topic should have a title, description, week number, resources (2-3), practice exercises (2-3), and an optional project name.`
+Generate a structured roadmap with 6-10 topics. Each topic should have:
+- A title and detailed description
+- Week number
+- Resources (2-3 resource names/descriptions)
+- Practice exercises (2-3)
+- Detailed study notes (3-5 paragraphs covering key concepts, explanations, and examples for self-study)
+- A quiz with 3-5 multiple choice questions to test understanding (each with 4 options and the correct answer index 0-3)
+- An optional milestone project name`
           }
         ],
         tools: [

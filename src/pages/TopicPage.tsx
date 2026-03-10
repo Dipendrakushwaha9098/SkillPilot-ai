@@ -1,12 +1,19 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle2, ExternalLink, Code2, BookOpen } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowLeft, CheckCircle2, ExternalLink, Code2, BookOpen, FileText, BrainCircuit, Check, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const TopicPage = () => {
   const { id } = useParams();
   const { roadmap, completedTopics, toggleTopicComplete } = useAuth();
+  const [quizStarted, setQuizStarted] = useState(false);
+  const [currentQ, setCurrentQ] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [showResult, setShowResult] = useState(false);
+  const [score, setScore] = useState(0);
+  const [quizDone, setQuizDone] = useState(false);
 
   if (!roadmap || !id) {
     return (
@@ -32,6 +39,36 @@ const TopicPage = () => {
   }
 
   const done = completedTopics.includes(topic.id);
+  const quiz = topic.quizzes || [];
+  const currentQuestion = quiz[currentQ];
+
+  const handleAnswer = (idx: number) => {
+    if (showResult) return;
+    setSelectedAnswer(idx);
+    setShowResult(true);
+    if (idx === currentQuestion.correctAnswer) {
+      setScore(s => s + 1);
+    }
+  };
+
+  const nextQuestion = () => {
+    if (currentQ < quiz.length - 1) {
+      setCurrentQ(q => q + 1);
+      setSelectedAnswer(null);
+      setShowResult(false);
+    } else {
+      setQuizDone(true);
+    }
+  };
+
+  const resetQuiz = () => {
+    setCurrentQ(0);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setScore(0);
+    setQuizDone(false);
+    setQuizStarted(false);
+  };
 
   return (
     <div className="min-h-screen bg-background pt-20 pb-12">
@@ -52,6 +89,22 @@ const TopicPage = () => {
 
           <h1 className="mb-4 font-display text-4xl font-bold">{topic.title}</h1>
           <p className="mb-8 text-lg text-muted-foreground">{topic.description}</p>
+
+          {/* Study Notes */}
+          {topic.notes && topic.notes.length > 0 && (
+            <div className="mb-6 rounded-2xl border bg-card p-6 shadow-card">
+              <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold">
+                <FileText className="h-5 w-5 text-primary" /> Study Notes
+              </h2>
+              <div className="space-y-4">
+                {topic.notes.map((note, i) => (
+                  <p key={i} className="text-sm leading-relaxed text-muted-foreground">
+                    {note}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Resources */}
           <div className="mb-6 rounded-2xl border bg-card p-6 shadow-card">
@@ -82,6 +135,105 @@ const TopicPage = () => {
               ))}
             </ul>
           </div>
+
+          {/* Quiz Section */}
+          {quiz.length > 0 && (
+            <div className="mb-6 rounded-2xl border-2 border-accent/20 bg-accent/5 p-6">
+              <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold">
+                <BrainCircuit className="h-5 w-5 text-accent" /> Knowledge Quiz
+              </h2>
+
+              {!quizStarted ? (
+                <div className="text-center py-4">
+                  <p className="mb-4 text-muted-foreground">
+                    Test your understanding with {quiz.length} questions
+                  </p>
+                  <Button variant="hero" onClick={() => setQuizStarted(true)}>
+                    Start Quiz
+                  </Button>
+                </div>
+              ) : quizDone ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center py-4"
+                >
+                  <div className="mb-2 text-5xl">
+                    {score === quiz.length ? "🎉" : score >= quiz.length / 2 ? "👍" : "📚"}
+                  </div>
+                  <h3 className="font-display text-2xl font-bold mb-1">
+                    {score}/{quiz.length} Correct
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    {score === quiz.length
+                      ? "Perfect score! You've mastered this topic."
+                      : score >= quiz.length / 2
+                      ? "Good job! Review the notes for topics you missed."
+                      : "Keep studying! Review the notes and try again."}
+                  </p>
+                  <Button variant="outline" onClick={resetQuiz}>
+                    Retake Quiz
+                  </Button>
+                </motion.div>
+              ) : (
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentQ}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                  >
+                    <div className="mb-1 text-xs font-medium text-muted-foreground">
+                      Question {currentQ + 1} of {quiz.length}
+                    </div>
+                    <h3 className="mb-4 font-display text-base font-semibold">
+                      {currentQuestion.question}
+                    </h3>
+                    <div className="space-y-2">
+                      {currentQuestion.options.map((opt, idx) => {
+                        const isCorrect = idx === currentQuestion.correctAnswer;
+                        const isSelected = idx === selectedAnswer;
+                        let borderClass = "border-border hover:border-accent/40";
+                        if (showResult) {
+                          if (isCorrect) borderClass = "border-primary bg-primary/10";
+                          else if (isSelected) borderClass = "border-destructive bg-destructive/10";
+                        } else if (isSelected) {
+                          borderClass = "border-accent bg-accent/5";
+                        }
+
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => handleAnswer(idx)}
+                            disabled={showResult}
+                            className={`flex w-full items-center gap-3 rounded-xl border-2 p-3 text-left text-sm transition-all ${borderClass} disabled:cursor-default`}
+                          >
+                            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs font-medium">
+                              {showResult && isCorrect ? (
+                                <Check className="h-3.5 w-3.5 text-primary" />
+                              ) : showResult && isSelected ? (
+                                <X className="h-3.5 w-3.5 text-destructive" />
+                              ) : (
+                                String.fromCharCode(65 + idx)
+                              )}
+                            </span>
+                            <span>{opt}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {showResult && (
+                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 flex justify-end">
+                        <Button variant="hero" size="sm" onClick={nextQuestion}>
+                          {currentQ < quiz.length - 1 ? "Next Question" : "See Results"}
+                        </Button>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              )}
+            </div>
+          )}
 
           {/* Project */}
           {topic.project && (

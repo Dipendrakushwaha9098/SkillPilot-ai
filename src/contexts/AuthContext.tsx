@@ -9,6 +9,12 @@ interface Assessment {
   dailyTime: string;
 }
 
+interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: number;
+}
+
 interface RoadmapTopic {
   id: string;
   title: string;
@@ -17,6 +23,8 @@ interface RoadmapTopic {
   completed: boolean;
   resources: string[];
   exercises: string[];
+  notes: string[];
+  quizzes: QuizQuestion[];
   project?: string;
 }
 

@@ -90,9 +90,24 @@ Generate a structured roadmap with 6-10 topics. Each topic should have:
                         completed: { type: "boolean" },
                         resources: { type: "array", items: { type: "string" } },
                         exercises: { type: "array", items: { type: "string" } },
+                        notes: { type: "array", items: { type: "string" }, description: "3-5 detailed study note paragraphs covering key concepts" },
+                        quizzes: {
+                          type: "array",
+                          items: {
+                            type: "object",
+                            properties: {
+                              question: { type: "string" },
+                              options: { type: "array", items: { type: "string" }, description: "Exactly 4 options" },
+                              correctAnswer: { type: "number", description: "Index 0-3 of the correct option" }
+                            },
+                            required: ["question", "options", "correctAnswer"],
+                            additionalProperties: false
+                          },
+                          description: "3-5 quiz questions"
+                        },
                         project: { type: "string" }
                       },
-                      required: ["id", "title", "description", "week", "completed", "resources", "exercises"],
+                      required: ["id", "title", "description", "week", "completed", "resources", "exercises", "notes", "quizzes"],
                       additionalProperties: false
                     }
                   }

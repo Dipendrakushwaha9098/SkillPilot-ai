@@ -23,7 +23,6 @@ async function streamChat({
   onDelta: (deltaText: string) => void;
   onDone: () => void;
 }) {
-  // Get the current session token
   const { data: { session } } = await supabase.auth.getSession();
   if (!session?.access_token) {
     throw new Error("You must be logged in to use the AI mentor.");

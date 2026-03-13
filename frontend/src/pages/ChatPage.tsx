@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { mentorService } from "@/services/api";
 import { useNavigate } from "react-router-dom";
 
+
 interface Message {
   role: "user" | "model";
   parts: [{ text: string }];

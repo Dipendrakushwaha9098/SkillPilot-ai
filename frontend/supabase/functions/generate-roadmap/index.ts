@@ -62,7 +62,7 @@ Generate a structured roadmap with 6-10 topics. Each topic should have:
 - Week number
 - Resources (2-3 resource names/descriptions)
 - Practice exercises (2-3)
-- Detailed study notes (3-5 paragraphs covering key concepts, explanations, and examples for self-study)
+- Detailed study notes (5-8 paragraphs per topic, arranged in a logical flow. Each paragraph should be deep, clear, and comprehensive, like a high-quality textbook section. Use Markdown formatting for emphasis, bullet points where appropriate, and include practical examples or code snippets if applicable to provide a professional learning experience).
 - A quiz with 3-5 multiple choice questions to test understanding (each with 4 options and the correct answer index 0-3)
 - An optional milestone project name`
           }

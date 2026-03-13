@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle2, ExternalLink, Code2, BookOpen, FileText, BrainCircuit, Check, X } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ExternalLink, Code2, BookOpen, FileText, BrainCircuit, Check, X, HelpCircle, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 
 const TopicPage = () => {
   const { id } = useParams();
@@ -98,9 +99,9 @@ const TopicPage = () => {
               </h2>
               <div className="space-y-4">
                 {topic.notes.map((note, i) => (
-                  <p key={i} className="text-sm leading-relaxed text-muted-foreground">
-                    {note}
-                  </p>
+                  <div key={i} className="prose prose-sm max-w-none text-muted-foreground leading-relaxed">
+                    <ReactMarkdown>{note}</ReactMarkdown>
+                  </div>
                 ))}
               </div>
             </div>
@@ -136,6 +137,21 @@ const TopicPage = () => {
             </ul>
           </div>
 
+          {/* Help & Mentorship */}
+          <div className="mb-6 rounded-2xl border-2 border-primary/20 bg-primary/5 p-6 shadow-sm">
+            <h2 className="mb-3 flex items-center gap-2 font-display text-lg font-semibold">
+              <HelpCircle className="h-5 w-5 text-primary" /> Need a Deep Dive?
+            </h2>
+            <p className="mb-4 text-sm text-muted-foreground">
+              Feeling stuck or want a more detailed explanation of <strong>{topic.title}</strong>? Our AI Mentor is ready to help.
+            </p>
+            <Link to={`/chat?topic=${encodeURIComponent(topic.title)}`}>
+              <Button variant="outline" className="w-full bg-background hover:bg-muted font-semibold gap-2 border-2">
+                <MessageSquare className="h-4 w-4" /> Ask AI Mentor About This Topic
+              </Button>
+            </Link>
+          </div>
+
           {/* Quiz Section */}
           {quiz.length > 0 && (
             <div className="mb-6 rounded-2xl border-2 border-accent/20 bg-accent/5 p-6">
@@ -168,8 +184,8 @@ const TopicPage = () => {
                     {score === quiz.length
                       ? "Perfect score! You've mastered this topic."
                       : score >= quiz.length / 2
-                      ? "Good job! Review the notes for topics you missed."
-                      : "Keep studying! Review the notes and try again."}
+                        ? "Good job! Review the notes for topics you missed."
+                        : "Keep studying! Review the notes and try again."}
                   </p>
                   <Button variant="outline" onClick={resetQuiz}>
                     Retake Quiz

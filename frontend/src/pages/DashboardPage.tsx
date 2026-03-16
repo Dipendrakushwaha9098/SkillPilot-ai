@@ -103,6 +103,7 @@ const DashboardPage = () => {
           </motion.div>
         )}
 
+        
         {/* Roadmap */}
         <h2 className="mb-6 font-display text-2xl font-bold">Your Detailed Roadmap</h2>
         <div className="space-y-8">

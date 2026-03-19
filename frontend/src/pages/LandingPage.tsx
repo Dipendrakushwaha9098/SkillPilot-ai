@@ -25,6 +25,7 @@ const LandingPage = () => {
         </div>
       </header>
 
+      
       {/* Features */}
       <section className="py-20 px-4 md:px-8">
         <div className="max-w-6xl mx-auto">

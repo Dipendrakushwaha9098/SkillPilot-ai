@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { roadmapService, progressService } from '../services/api';
 import { ChevronLeft, PlayCircle, ExternalLink, CheckCircle, ListTodo } from 'lucide-react';
 
+
 const CourseViewer = () => {
   const { topicTitle } = useParams();
   const [topic, setTopic] = useState<any>(null);
@@ -29,6 +30,7 @@ const CourseViewer = () => {
     fetchTopic();
   }, [topicTitle]);
 
+  
   const handleComplete = async () => {
     try {
       await progressService.update(topicTitle as string);
@@ -41,6 +43,7 @@ const CourseViewer = () => {
   if (loading) return <div className="p-8">Loading lesson...</div>;
   if (!topic) return <div className="p-8">Topic not found.</div>;
 
+  
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}

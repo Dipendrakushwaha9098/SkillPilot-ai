@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Brain, Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,6 +16,7 @@ const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) { toast.error("Please fill all fields"); return; }
@@ -29,6 +31,7 @@ const LoginPage = () => {
     }
   };
 
+  
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 pt-16">
       <div className="w-full max-w-md">

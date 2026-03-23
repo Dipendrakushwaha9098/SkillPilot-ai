@@ -23,6 +23,7 @@ const ChatPage = () => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -35,6 +36,7 @@ const ChatPage = () => {
     setInput("");
     setLoading(true);
 
+    
     try {
       const res = await mentorService.chat({
         message: input.trim(),
@@ -51,6 +53,7 @@ const ChatPage = () => {
     }
   };
 
+  
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <div className="border-b bg-card px-4 py-3 sticky top-0 z-10">
@@ -70,6 +73,7 @@ const ChatPage = () => {
         </div>
       </div>
 
+      
       {/* Messages */}
       <div className="flex-1 overflow-y-auto">
         <div className="container mx-auto max-w-3xl px-4 py-6">
@@ -116,6 +120,7 @@ const ChatPage = () => {
         </div>
       </div>
 
+      
       {/* Input */}
       <div className="border-t bg-card px-4 py-4 sticky bottom-0">
         <div className="container mx-auto max-w-3xl">

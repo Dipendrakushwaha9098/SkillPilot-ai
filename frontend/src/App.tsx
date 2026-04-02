@@ -10,6 +10,7 @@ import CourseViewer from './pages/CourseViewer';
 import ChatPage from './pages/ChatPage';
 import { Toaster } from 'sonner';
 
+
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return (
@@ -19,6 +20,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   );
   return user ? <>{children}</> : <Navigate to="/login" />;
 };
+
 
 function App() {
   return (

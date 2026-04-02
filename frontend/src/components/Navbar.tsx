@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Brain, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 
+
 const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();

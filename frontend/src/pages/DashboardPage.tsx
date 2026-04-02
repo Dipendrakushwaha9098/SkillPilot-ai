@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
 import { CheckCircle2, Circle, BookOpen, MessageSquare, Trophy, Flame, ArrowRight } from "lucide-react";
 
+
 const DashboardPage = () => {
   const { user, roadmap, completedTopics, toggleTopicComplete } = useAuth();
   const navigate = useNavigate();

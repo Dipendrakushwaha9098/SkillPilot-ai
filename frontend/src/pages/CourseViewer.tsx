@@ -11,6 +11,7 @@ const CourseViewer = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  
   useEffect(() => {
     const fetchTopic = async () => {
       try {

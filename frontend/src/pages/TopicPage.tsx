@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle2, ExternalLink, Code2, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 
+
 const TopicPage = () => {
   const { id } = useParams();
   const { roadmap, completedTopics, toggleTopicComplete } = useAuth();
 
+  
   if (!roadmap || !id) {
     return (
       <div className="flex min-h-screen items-center justify-center pt-16">

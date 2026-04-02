@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Brain, Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+
 const SignupPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,10 +17,12 @@ const SignupPage = () => {
   const { signup } = useAuth();
   const navigate = useNavigate();
 
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !password) { toast.error("Please fill all fields"); return; }
     if (password.length < 6) { toast.error("Password must be at least 6 characters"); return; }
+
     
     setLoading(true);
     const result = await signup(name, email, password);
@@ -33,6 +36,7 @@ const SignupPage = () => {
     }
   };
 
+  
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 pt-16">
       <div className="w-full max-w-md">

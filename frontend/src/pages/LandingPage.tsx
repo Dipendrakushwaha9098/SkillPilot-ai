@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Rocket, Brain, Target, Zap } from 'lucide-react';
 
-
 const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white">
@@ -25,7 +24,6 @@ const LandingPage = () => {
           </div>
         </div>
       </header>
-
       
       {/* Features */}
       <section className="py-20 px-4 md:px-8">

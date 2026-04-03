@@ -1,5 +1,6 @@
 const User = require('../models/User');
 
+
 exports.updateProgress = async (req, res) => {
   try {
     const { topicId } = req.body;

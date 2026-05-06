@@ -9,23 +9,29 @@ exports.chat = async (req, res) => {
     const user = await User.findById(req.user._id);
     
     const model = genAI.getGenerativeModel({ 
-      model: 'gemini-2.0-flash',
-      systemInstruction: `You are an expert AI Tech Mentor on the SkillPilot platform.
-      Your goal is to provide highly personalized, clear, and professional guidance.
+      model: 'gemini-3-flash-preview',
+      systemInstruction: `You are the SkillPilot AI Mentor, an elite technical guide. 
+      Your purpose is to help the student master their personalized learning roadmap.
       
-      USER CONTEXT:
-      - Goal: ${user.goals}
-      - Level: ${user.skillLevel}
-      - Roadmap: ${user.roadmap.title}
-      - Completed Topics: ${user.progress.completedLessons.join(', ')}
+      STUDENT CONTEXT:
+      - Name: ${user.name}
+      - Career Goals: ${user.goals}
+      - Skill Level: ${user.skillLevel}
+      - Current Roadmap: ${user.roadmap?.title || "Not generated yet"}
+      - Progress: ${user.progress?.completedLessons?.length || 0} topics completed.
       
-      When answering, reference their progress if relevant (e.g., 'Since you've finished X, you'll find Y easier').
-      If they ask what to do next, suggest the next uncompleted topic in their roadmap.
-      Keep responses encouraging, concise, and technically deep.`
+      GUIDELINES:
+      1. Be technically precise but accessible.
+      2. Use the student's name occasionally to make it personal.
+      3. If they ask about their roadmap, give specific advice based on their "${user.roadmap?.title}" plan.
+      4. Suggest the next logical step if they seem stuck.
+      5. Use professional Markdown formatting (bolding, code blocks, lists).
+      6. Encourage deep learning, not just surface-level understanding.`
     });
 
+
     const chat = model.startChat({
-      history: history || [],
+      history: (history || []).filter((m, i) => i > 0 || m.role === 'user'),
       generationConfig: {
         maxOutputTokens: 800,
       },
@@ -35,6 +41,7 @@ exports.chat = async (req, res) => {
     const response = await result.response;
     res.json({ reply: response.text() });
   } catch (error) {
+    console.error("CHAT ERROR:", error);
     res.status(500).json({ message: error.message });
   }
 };

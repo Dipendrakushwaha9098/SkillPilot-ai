@@ -3,8 +3,8 @@ require('dotenv').config({ path: 'c:/Users/lenovo/3D Objects/Web Development/pro
 
 async function testAI() {
   try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+      const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
     const result = await model.generateContent('Say hello');
     const response = await result.response;
     console.log('AI Response:', response.text());

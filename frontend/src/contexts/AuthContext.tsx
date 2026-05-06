@@ -1,47 +1,36 @@
-import { useState, useEffect, createContext, useContext, ReactNode } from "react";
-import { authService, roadmapService, progressService } from "../services/api";
+import {
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+  ReactNode
+} from "react";
+import {
+  authService,
+  roadmapService,
+  progressService,
+  AuthUser,
+  Roadmap,
+  ProgressData
+} from "../services/api";
 
-interface Assessment {
-  skillLevel: string;
-  interests: string[];
-  goals: string;
-  dailyStudyTime: number;
-}
-
-interface RoadmapTopic {
-  title: string;
-  explanation: string;
-  resources: string[];
-  videoLinks: string[];
-  exercises: string[];
-}
-
-interface RoadmapMonth {
-  month: number;
-  topics: RoadmapTopic[];
-  project: {
-    title: string;
-    description: string;
-  };
-}
-
-interface Roadmap {
-  title: string;
-  description: string;
-  months: RoadmapMonth[];
-}
+// ================= TYPES =================
 
 interface AuthContextType {
-  user: { id: string; name: string; email: string } | null;
+  user: AuthUser | null;
+  token: string | null;
   loading: boolean;
   roadmap: Roadmap | null;
   completedTopics: string[];
+  isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<{ error?: string }>;
   signup: (name: string, email: string, password: string) => Promise<{ error?: string }>;
   logout: () => void;
   fetchRoadmap: () => Promise<void>;
   toggleTopicComplete: (topicTitle: string) => Promise<void>;
 }
+
+// ================= CONTEXT =================
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -51,98 +40,169 @@ export const useAuth = () => {
   return ctx;
 };
 
+// ================= PROVIDER =================
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [roadmap, setRoadmap] = useState<Roadmap | null>(null);
   const [completedTopics, setCompletedTopics] = useState<string[]>([]);
 
+  // ================= INIT =================
+
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      const parsedUser = JSON.parse(savedUser);
-      setUser(parsedUser);
-      // Fetch initial data if logged in
-      fetchInitialData();
-    } else {
-      setLoading(false);
-    }
+    const init = async () => {
+      try {
+        const savedUser = localStorage.getItem("user");
+        const savedToken = localStorage.getItem("token");
+
+        if (savedUser && savedToken) {
+          const parsedUser = JSON.parse(savedUser);
+          setUser(parsedUser);
+          setToken(savedToken);
+          
+          // Pre-fetch data if we have a session
+          await fetchInitialData();
+        }
+      } catch (error) {
+        console.error("[AuthContext] Initialization failed:", error);
+        // Clear corrupt session
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    init();
   }, []);
+
+  // ================= FETCH INITIAL =================
 
   const fetchInitialData = async () => {
     try {
-      const [roadmapRes, progressRes] = await Promise.all([
+      const [roadmapRes, progressRes] = await Promise.allSettled([
         roadmapService.get(),
         progressService.get()
       ]);
-      setRoadmap(roadmapRes.data);
-      setCompletedTopics(progressRes.data.completedLessons || []);
+
+      if (roadmapRes.status === 'fulfilled') setRoadmap(roadmapRes.value || null);
+      if (progressRes.status === 'fulfilled') setCompletedTopics(progressRes.value?.completedLessons || []);
+      
     } catch (error) {
-      console.error("Failed to fetch initial data", error);
-    } finally {
-      setLoading(false);
+      console.error("[AuthContext] Failed to fetch initial data:", error);
     }
   };
 
-  const login = async (email: string, password: string): Promise<{ error?: string }> => {
+  // ================= LOGIN =================
+
+  const login = async (email: string, password: string) => {
     try {
       const res = await authService.login({ email, password });
-      setUser(res.data);
-      localStorage.setItem('user', JSON.stringify(res.data));
+
+      // Consistent storage
+      setUser(res.user);
+      setToken(res.token);
+
+      localStorage.setItem("user", JSON.stringify(res.user));
+      localStorage.setItem("token", res.token);
+
+      // Refresh data after login
       await fetchInitialData();
+
       return {};
-    } catch (error: any) {
-      return { error: error.response?.data?.message || "Login failed" };
+    } catch (error: unknown) {
+      console.error("[AuthContext] Login error:", error);
+      const message = error instanceof Error ? error.message : "Login failed";
+      return { error: message };
     }
   };
 
-  const signup = async (name: string, email: string, password: string): Promise<{ error?: string }> => {
+  // ================= SIGNUP =================
+
+  const signup = async (name: string, email: string, password: string) => {
     try {
       const res = await authService.signup({ name, email, password });
-      setUser(res.data);
-      localStorage.setItem('user', JSON.stringify(res.data));
-      setLoading(false);
+
+      setUser(res.user);
+      setToken(res.token);
+
+      localStorage.setItem("user", JSON.stringify(res.user));
+      localStorage.setItem("token", res.token);
+
       return {};
     } catch (error: any) {
-      return { error: error.response?.data?.message || "Signup failed" };
+      console.error("[AuthContext] Signup error:", error);
+      
+      // Extract backend error message if available
+      const backendMessage = error.response?.data?.error || error.response?.data?.message;
+      const message = backendMessage || error.message || "Signup failed";
+      
+      return { error: message };
     }
+
   };
+
+  // ================= LOGOUT =================
 
   const logout = () => {
     setUser(null);
+    setToken(null);
     setRoadmap(null);
     setCompletedTopics([]);
-    localStorage.removeItem('user');
+
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
+  // ================= FETCH ROADMAP =================
+
   const fetchRoadmap = async () => {
-    const res = await roadmapService.get();
-    setRoadmap(res.data);
+    try {
+      const res = await roadmapService.get();
+      const roadmapData = res;
+
+      setRoadmap(roadmapData);
+    } catch (error) {
+      console.error("Failed to fetch roadmap", error);
+    }
   };
+
+  // ================= TOGGLE TOPIC =================
 
   const toggleTopicComplete = async (topicTitle: string) => {
     try {
       await progressService.update(topicTitle);
-      setCompletedTopics(prev => 
-        prev.includes(topicTitle) ? prev : [...prev, topicTitle]
+
+      setCompletedTopics(prev =>
+        prev.includes(topicTitle)
+          ? prev.filter(t => t !== topicTitle)
+          : [...prev, topicTitle]
       );
     } catch (error) {
       console.error("Failed to update progress", error);
     }
   };
 
+  // ================= PROVIDER VALUE =================
+
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      loading, 
-      roadmap, 
-      completedTopics, 
-      login, 
-      signup, 
-      logout, 
-      fetchRoadmap,
-      toggleTopicComplete 
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        loading,
+        roadmap,
+        completedTopics,
+        isAuthenticated: !!user,
+        login,
+        signup,
+        logout,
+        fetchRoadmap,
+        toggleTopicComplete
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

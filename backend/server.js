@@ -25,11 +25,13 @@ const authRoutes = require('./routes/authRoutes');
 const roadmapRoutes = require('./routes/roadmapRoutes');
 const mentorRoutes = require('./routes/mentorRoutes');
 const progressRoutes = require('./routes/progressRoutes');
+const notesRoutes = require('./routes/notesRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/roadmap', roadmapRoutes);
 app.use('/api/mentor', mentorRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/notes', notesRoutes);
 
 app.get('/', (req, res) => {
   res.send('SkillPilot AI API is running...');

@@ -1,100 +1,340 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-const User = require('../models/User');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const User = require("../models/User");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+
+// ===== FALLBACK ROADMAP =====
+const generateFallbackRoadmap = (skillLevel, interests) => {
+  return {
+    title: `${interests?.[0] || "Technology"} Learning Roadmap`,
+    description: "A structured roadmap generated as a fallback when AI generation fails.",
+    months: [
+      {
+        month: 1,
+        topics: [
+          {
+            title: "Fundamentals",
+            explanation: "Start by learning the core concepts of your chosen field.",
+            notes: [
+              "Understand the basic principles and terminology.",
+              "Practice small coding examples or exercises.",
+              "Build a strong conceptual foundation.",
+              "Focus on problem solving and logical thinking.",
+              "Review concepts regularly."
+            ],
+            resources: [
+              "https://developer.mozilla.org",
+              "https://freecodecamp.org"
+            ],
+            videoLinks: [
+              "https://www.youtube.com/results?search_query=programming+basics"
+            ],
+            exercises: [
+              "Create a simple beginner project",
+              "Solve 10 basic coding problems"
+            ]
+          }
+        ],
+        project: {
+          title: "Beginner Project",
+          description: "Build a small project applying the fundamental concepts you learned."
+        }
+      }
+    ]
+  };
+};
+
+
+// ===== GENERATE ROADMAP =====
 exports.generateRoadmap = async (req, res) => {
-  console.log('--- START ROADMAP GENERATION ---');
-  console.log('User ID:', req.user?._id);
+  console.log("------ START ROADMAP GENERATION ------");
+
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
     const { skillLevel, interests, goals, dailyStudyTime } = req.body;
-    console.log('Payload:', { skillLevel, interests, goals, dailyStudyTime });
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+    console.log("Request Body:", req.body);
+
+    if (!skillLevel || !interests || !goals || !dailyStudyTime) {
+      return res.status(400).json({
+        message: "Missing required fields",
+      });
+    }
+
+    const interestsText = Array.isArray(interests)
+      ? interests.join(", ")
+      : interests;
+
+    // ===== GEMINI MODEL =====
+    const model = genAI.getGenerativeModel({
+      model: "gemini-3-flash-preview",
+      generationConfig: {
+        temperature: 0.7,
+        topP: 0.95,
+        topK: 40,
+        maxOutputTokens: 16384,
+        responseMimeType: "application/json",
+      }
+    });
 
     const prompt = `
-      You are an expert tech mentor. Create a highly personalized 3-month learning roadmap for a student.
-      Level: ${skillLevel}
-      Interests: ${interests.join(', ')}
-      Goals: ${goals}
-      Daily Study Time: ${dailyStudyTime} hours
+You are an expert tech mentor. Your task is to generate a comprehensive, personalized 3-month learning roadmap for a student.
 
-      Return the roadmap as a structured JSON object with the following format:
-      {
-        "title": "Roadmap Title",
-        "description": "General overview",
-        "months": [
-          {
-            "month": 1,
-            "topics": [
-              {
-                "title": "Topic Name",
-                "explanation": "Brief overview description",
-                "notes": [
-                  "Paragraph 1: Deep dive into the core concepts with clear explanations.",
-                  "Paragraph 2: Detailed breakdown of the 'how-it-works' with practical logic.",
-                  "Paragraph 3: Advanced insights, professional tips, and potential pitfalls.",
-                  "Paragraph 4: Real-world use cases and architectural context.",
-                  "Paragraph 5: Summary and best practices for mastery."
-                ],
-                "resources": ["Resource Name & Link 1", "Resource Name & Link 2"],
-                "videoLinks": ["Video Tutorial Link 1"],
-                "exercises": ["Detailed Practice Project/Exercise 1", "Detailed Practice Project/Exercise 2"]
-              }
-            ],
-            "project": {
-              "title": "Milestone Project Title",
-              "description": "A comprehensive project description that integrates all month's concepts, suitable for ${skillLevel} level"
+STUDENT PROFILE:
+- Skill Level: ${skillLevel}
+- Interests: ${interestsText}
+- Professional Goals: ${goals}
+- Daily Study Commitment: ${dailyStudyTime} hours
+${req.body.assessmentResults ? `- Assessment Results: ${JSON.stringify(req.body.assessmentResults)}` : ''}
+
+INSTRUCTIONS:
+1. Create a structured roadmap for 3 months.
+2. Each month should have specific topics and a final project.
+3. For each topic, provide deep, structured study notes (at least 5 bullet points).
+4. Include 2 relevant resource links and 1 video link per topic.
+5. Provide 2 multiple-choice questions per topic for self-assessment.
+6. Address the gaps identified in the assessment results.
+
+RESPONSE FORMAT:
+You MUST return ONLY a valid JSON object following this schema:
+{
+  "title": "A compelling title for the roadmap",
+  "description": "A high-level summary of the learning journey",
+  "months": [
+    {
+      "month": 1,
+      "topics": [
+        {
+          "title": "Topic Name",
+          "explanation": "Brief overview",
+          "notes": ["Detailed point 1", "Detailed point 2", "Detailed point 3", "Detailed point 4", "Detailed point 5"],
+          "resources": ["URL 1", "URL 2"],
+          "videoLinks": ["YouTube URL"],
+          "exercises": ["Hands-on exercise 1", "Hands-on exercise 2"],
+          "quizzes": [
+            {
+              "question": "Question text",
+              "options": ["Opt A", "Opt B", "Opt C", "Opt D"],
+              "answer": "Exact correct option text"
             }
-          }
-        ]
+          ]
+        }
+      ],
+      "project": {
+        "title": "Month Project Title",
+        "description": "Project description and goals"
       }
-      The 'notes' field is CRITICAL. Each paragraph must be clear, deep, and professional, providing the depth of a textbook section. Use Markdown formatting inside the strings for bold text, lists, and code blocks.
-      Ensure the content is high quality, logically structured, and provides extreme clarity for self-study.
-    `;
+    }
+  ]
+}
+`;
+
+    console.log("Sending optimized prompt to Gemini...");
 
     const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log('AI Response Text:', text);
-    
-    // Extract JSON from the text response (Gemini sometimes adds markdown blocks)
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    const text = result.response.text();
+
+    console.log("AI Response Received.");
+
+    const cleaned = text.replace(/```json|```/g, "").trim();
+
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+
     if (!jsonMatch) {
-      console.error('Failed to extract JSON from AI response');
-      throw new Error('Failed to generate valid JSON roadmap');
+      throw new Error("AI did not return valid JSON");
     }
-    
+
     let roadmap;
+
     try {
       roadmap = JSON.parse(jsonMatch[0]);
     } catch (parseError) {
-      console.error('JSON Parse Error:', parseError);
-      throw new Error('Failed to parse roadmap JSON');
+      console.error("JSON Parse Error:", parseError);
+      throw new Error("Failed to parse roadmap JSON");
     }
-    console.log('Roadmap generated successfully:', roadmap.title);
 
-    // Save to user
+    console.log("Roadmap generated:", roadmap.title);
+
     const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Save roadmap
     user.skillLevel = skillLevel;
     user.interests = interests;
     user.goals = goals;
     user.dailyStudyTime = dailyStudyTime;
     user.assessmentCompleted = true;
     user.roadmap = roadmap;
+
     await user.save();
 
+    console.log("Roadmap saved to database");
+
     res.json(roadmap);
+
   } catch (error) {
-    console.error('ROADMAP GENERATION ERROR:', error);
-    res.status(500).json({ message: error.message });
+    console.error("ROADMAP GENERATION ERROR:", error);
+
+    // ===== FALLBACK SYSTEM =====
+    console.log("Using fallback roadmap...");
+
+    const fallbackRoadmap = generateFallbackRoadmap(
+      req.body.skillLevel,
+      req.body.interests
+    );
+
+    res.json(fallbackRoadmap);
   }
 };
 
+
+// ===== GET ROADMAP =====
 exports.getRoadmap = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        message: "User not authenticated",
+      });
+    }
+
     const user = await User.findById(req.user._id);
-    res.json(user.roadmap);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.json(user.roadmap || {});
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("GET ROADMAP ERROR:", error);
+
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
+
+// ===== GENERATE ASSESSMENT QUESTIONS =====
+exports.generateAssessmentQuestions = async (req, res) => {
+  try {
+    const { skillLevel, interests } = req.body;
+
+    if (!skillLevel || !interests) {
+      return res.status(400).json({ message: "Missing skillLevel or interests" });
+    }
+
+    const interestsText = Array.isArray(interests) ? interests.join(", ") : interests;
+
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+
+    const prompt = `
+You are an expert tech recruiter and mentor.
+Generate 5 multiple choice questions to assess a student's knowledge in: ${interestsText}.
+The questions should be appropriate for a ${skillLevel} level.
+
+Return ONLY JSON in this format:
+[
+  {
+    "question": "Question text?",
+    "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+    "answer": "Correct Option text exactly as written in options"
+  }
+]
+
+Return ONLY JSON. No markdown.
+`;
+
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
+    const cleaned = text.replace(/```json|```/g, "").trim();
+    const jsonMatch = cleaned.match(/\[[\s\S]*\]/);
+
+    if (!jsonMatch) {
+      throw new Error("AI did not return valid JSON for assessment");
+    }
+
+    const questions = JSON.parse(jsonMatch[0]);
+    res.json(questions);
+
+  } catch (error) {
+    console.error("ASSESSMENT GENERATION ERROR:", error);
+    res.status(500).json({ message: "Failed to generate assessment questions" });
+  }
+};
+
+// ===== GENERATE WEEKLY TEST =====
+exports.generateWeeklyTest = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user || !user.roadmap || !user.roadmap.months) {
+      return res.status(400).json({ message: "No roadmap found for weekly test" });
+    }
+
+    // Calculate current week
+    const diffMs = Date.now() - new Date(user.createdAt).getTime();
+    const currentWeek = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000)) + 1;
+    
+    // Determine which month we are in (assuming 4 weeks per month)
+    const monthIndex = Math.floor((currentWeek - 1) / 4);
+    const monthData = user.roadmap.months[monthIndex] || user.roadmap.months[user.roadmap.months.length - 1];
+    
+    // Get topics for this month to provide context
+    const topicsText = monthData.topics.map(t => t.title).join(", ");
+    console.log(`WEEKLY TEST: Generating for Week ${currentWeek}, Topics: ${topicsText}`);
+
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+
+    const prompt = `
+You are an expert tech mentor.
+Generate a "Weekly Assessment" for a student studying: ${topicsText}.
+The student is currently in Week ${currentWeek} of their learning journey.
+
+Generate 10 multiple choice questions that cover the concepts found in these topics.
+Make sure the difficulty is appropriate for someone who has been studying for ${currentWeek} weeks.
+
+Return ONLY JSON in this format:
+{
+  "week": ${currentWeek},
+  "title": "Week ${currentWeek} Mastery Test",
+  "questions": [
+    {
+      "question": "Question text?",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
+      "answer": "Correct Option text exactly as written in options"
+    }
+  ]
+}
+
+Return ONLY JSON. No markdown.
+`;
+
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
+    console.log("WEEKLY TEST: AI raw response received");
+    const cleaned = text.replace(/```json|```/g, "").trim();
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+
+    if (!jsonMatch) {
+      console.error("WEEKLY TEST: No JSON match in AI response:", text);
+      throw new Error("AI did not return valid JSON for weekly test");
+    }
+
+    const test = JSON.parse(jsonMatch[0]);
+    console.log("WEEKLY TEST: Success");
+    res.json(test);
+
+  } catch (error) {
+    console.error("WEEKLY TEST ERROR:", error);
+    res.status(500).json({ message: error.message });
+  }
+};

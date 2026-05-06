@@ -1,42 +1,96 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import LandingPage from './pages/LandingPage';
-import SignupPage from './pages/SignupPage';
-import LoginPage from './pages/LoginPage';
-import AssessmentPage from './pages/AssessmentPage';
-import DashboardPage from './pages/DashboardPage';
-import CourseViewer from './pages/CourseViewer';
-import ChatPage from './pages/ChatPage';
-import { Toaster } from 'sonner';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster";
 
-const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, loading } = useAuth();
-  if (loading) return (
-    <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-    </div>
-  );
-  return user ? <>{children}</> : <Navigate to="/login" />;
-};
+// Pages
+import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import DashboardPage from "./pages/DashboardPage";
+import AssessmentPage from "./pages/AssessmentPage";
+import ChatPage from "./pages/ChatPage";
+import TopicPage from "./pages/TopicPage";
+import WeeklyTestPage from "./pages/WeeklyTestPage";
+import NotesPage from "./pages/NotesPage";
+import ForgotPassword from "./pages/ForgotPassword";
+import NotFound from "./pages/NotFound";
+
+
+// Components
+import ProtectedRoute from "./components/ProtectedRoute";
+import Navbar from "./components/Navbar";
+import AIChatBox from "./components/AIChatBox";
+
 
 function App() {
   return (
-    <AuthProvider>
-      <Toaster position="top-center" richColors />
-      <Router>
+    <Router>
+      <div className="min-h-screen bg-black">
+        <Navbar />
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
-          <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/assessment" element={<PrivateRoute><AssessmentPage /></PrivateRoute>} />
-          <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
-          <Route path="/chat" element={<PrivateRoute><ChatPage /></PrivateRoute>} />
-          <Route path="/course/:topicTitle" element={<PrivateRoute><CourseViewer /></PrivateRoute>} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
+
+          {/* Protected Routes */}
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/assessment" 
+            element={
+              <ProtectedRoute>
+                <AssessmentPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/chat" 
+            element={
+              <ProtectedRoute>
+                <ChatPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/course/:topicTitle" 
+            element={
+              <ProtectedRoute>
+                <TopicPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/weekly-test" 
+            element={
+              <ProtectedRoute>
+                <WeeklyTestPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/notes" 
+            element={
+              <ProtectedRoute>
+                <NotesPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* 404 */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
-      </Router>
-    </AuthProvider>
+        <AIChatBox />
+        <Toaster />
+      </div>
+    </Router>
   );
 }
 

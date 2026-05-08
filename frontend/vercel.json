@@ -1,0 +1,10 @@
+{
+  "experimentalServices": {
+    "frontend": {
+      "entrypoint": "frontend"
+    },
+    "backend": {
+      "entrypoint": "backend"
+    }
+  }
+}

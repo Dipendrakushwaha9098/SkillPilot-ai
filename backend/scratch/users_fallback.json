@@ -318,5 +318,68 @@
       "lastActive": "2026-08-21T10:33:57.790Z"
     },
     "createdAt": "2026-08-21T10:33:57.790Z"
+  },
+  "mem_1787992064690_vuptzdvqd": {
+    "_id": "mem_1787992064690_vuptzdvqd",
+    "name": "Unit Test User",
+    "email": "test_1787992064689@example.com",
+    "password": "$2b$10$xvy1q0dvpMQ4oyhy3.qE4Oy28agxyneJ6ibR2Y56O4r3AC8iQrCt.",
+    "isVerified": true,
+    "skillLevel": "Intermediate",
+    "interests": [
+      "Node.js",
+      "React"
+    ],
+    "goals": "",
+    "dailyStudyTime": 2,
+    "assessmentCompleted": false,
+    "roadmap": {},
+    "progress": {
+      "completedLessons": [],
+      "quizResults": [],
+      "streak": 0,
+      "lastActive": "2026-08-29T08:27:44.898Z"
+    },
+    "createdAt": "2026-08-29T08:27:44.898Z"
+  },
+  "mem_1787992425136_37abrgpak": {
+    "_id": "mem_1787992425136_37abrgpak",
+    "name": "Login Test User",
+    "email": "testlogin_1787992425135@example.com",
+    "password": "$2b$10$B/rfQZ.3TZT3jiluy.V7seKehtv6mR/z5fNA5K9sAP5c4O1vflg9m",
+    "isVerified": true,
+    "skillLevel": "Beginner",
+    "interests": [],
+    "goals": "",
+    "dailyStudyTime": 2,
+    "assessmentCompleted": false,
+    "roadmap": {},
+    "progress": {
+      "completedLessons": [],
+      "quizResults": [],
+      "streak": 0,
+      "lastActive": "2026-08-29T08:33:45.354Z"
+    },
+    "createdAt": "2026-08-29T08:33:45.354Z"
+  },
+  "mem_1787992425981_h4xotlxsu": {
+    "_id": "mem_1787992425981_h4xotlxsu",
+    "name": "Unverified User",
+    "email": "unverified_1787992425981@example.com",
+    "password": "$2b$10$TlQGNkjQNYG1BBSdJblGAuO2TkBrmratVQg/kQxH5fBQDEx0Le9RC",
+    "isVerified": false,
+    "skillLevel": "Beginner",
+    "interests": [],
+    "goals": "",
+    "dailyStudyTime": 2,
+    "assessmentCompleted": false,
+    "roadmap": {},
+    "progress": {
+      "completedLessons": [],
+      "quizResults": [],
+      "streak": 0,
+      "lastActive": "2026-08-29T08:33:46.159Z"
+    },
+    "createdAt": "2026-08-29T08:33:46.159Z"
   }
 }

@@ -107,8 +107,15 @@ exports.chat = async (req, res) => {
       systemInstruction: `${baseInstruction}\n\n${modeInstruction}\n\n${followUpInstruction}`
     });
 
+    const formattedHistory = (history || [])
+      .map(m => ({
+        role: m.role === 'model' ? 'model' : 'user',
+        parts: [{ text: typeof m.parts?.[0] === 'string' ? m.parts[0] : (m.parts?.[0]?.text || m.text || '') }]
+      }))
+      .filter(m => m.parts[0].text.trim().length > 0);
+
     const chat = model.startChat({
-      history: (history || []).filter((m, i) => i > 0 || m.role === 'user'),
+      history: formattedHistory,
       generationConfig: {
         maxOutputTokens: (selectedMode === 'concise') ? 450 : 1400,
         temperature: 0.7,

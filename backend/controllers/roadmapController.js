@@ -341,4 +341,64 @@ Return ONLY JSON. No markdown.
     console.error("WEEKLY TEST ERROR:", error);
     res.status(500).json({ message: error.message });
   }
+};
+
+// ===== GET PHASE =====
+exports.getPhase = async (req, res) => {
+  try {
+    const user = await userStore.findById(req.user._id);
+    if (!user || !user.roadmap || !user.roadmap.months) {
+      return res.status(404).json({ message: "Roadmap not found" });
+    }
+
+    const { phaseId } = req.params;
+    const monthNum = parseInt(phaseId, 10);
+    const monthData = user.roadmap.months.find(m => m.month === monthNum) || user.roadmap.months[0];
+
+    if (!monthData) {
+      return res.status(404).json({ message: "Phase not found" });
+    }
+
+    res.json({
+      id: String(monthData.month),
+      title: `Month ${monthData.month} - ${user.roadmap.title || 'Learning Phase'}`,
+      description: user.roadmap.description || 'Structured learning phase',
+      topics: monthData.topics || []
+    });
+  } catch (error) {
+    console.error("GET PHASE ERROR:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// ===== GET TOPIC =====
+exports.getTopic = async (req, res) => {
+  try {
+    const user = await userStore.findById(req.user._id);
+    if (!user || !user.roadmap || !user.roadmap.months) {
+      return res.status(404).json({ message: "Roadmap not found" });
+    }
+
+    const { topicId } = req.params;
+    let foundTopic = null;
+
+    for (const month of user.roadmap.months) {
+      for (const topic of month.topics || []) {
+        if (topic.title.toLowerCase() === topicId.toLowerCase() || encodeURIComponent(topic.title) === topicId) {
+          foundTopic = topic;
+          break;
+        }
+      }
+      if (foundTopic) break;
+    }
+
+    if (!foundTopic) {
+      return res.status(404).json({ message: "Topic not found" });
+    }
+
+    res.json(foundTopic);
+  } catch (error) {
+    console.error("GET TOPIC ERROR:", error);
+    res.status(500).json({ message: error.message });
+  }
 };

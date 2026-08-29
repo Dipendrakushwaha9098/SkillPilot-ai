@@ -6,23 +6,24 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ThemeToggle = () => {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) return saved === "dark";
+    return document.documentElement.classList.contains("dark");
+  });
 
   useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains("dark");
-    setIsDark(isDarkMode);
-  }, []);
-
-  const toggleTheme = () => {
-    const newDark = !isDark;
-    setIsDark(newDark);
-    if (newDark) {
+    if (isDark) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
+  }, [isDark]);
+
+  const toggleTheme = () => {
+    setIsDark(prev => !prev);
   };
 
   return (
@@ -30,9 +31,10 @@ const ThemeToggle = () => {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="rounded-full w-9 h-9 border bg-background/50 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground transition-all"
+      title={isDark ? "Switch to Day Mode (Light)" : "Switch to Night Mode (Dark)"}
+      className="rounded-full w-9 h-9 border border-border bg-background/80 backdrop-blur-md hover:bg-accent hover:text-accent-foreground transition-all shadow-sm"
     >
-      {isDark ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
+      {isDark ? <Sun className="h-[1.1rem] w-[1.1rem] text-amber-400" /> : <Moon className="h-[1.1rem] w-[1.1rem] text-emerald-500" />}
       <span className="sr-only">Toggle theme</span>
     </Button>
   );
@@ -55,6 +57,11 @@ const Navbar = () => {
 
   const toggleMenu = () => setMobileOpen(prev => !prev);
   const closeMenu = () => setMobileOpen(false);
+
+  // Hide global navbar on dedicated full-screen views like ChatPage
+  if (location.pathname === "/chat") {
+    return null;
+  }
 
   const handleLogout = async () => {
     await logout();
@@ -96,7 +103,7 @@ const Navbar = () => {
             <Brain className="h-6 w-6 text-white" />
           </div>
           <span className="text-xl font-black tracking-tighter">
-            SkillPilot <span className="text-primary italic">AI</span>
+            SkillPilot <span className="text-emerald-400 italic font-extrabold">Omni-AI</span>
           </span>
         </Link>
 

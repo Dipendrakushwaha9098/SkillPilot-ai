@@ -128,23 +128,38 @@ const CourseViewer: React.FC = () => {
           {/* RESOURCES */}
           <div>
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <ExternalLink className="text-indigo-600" />
-              Recommended Resources
+              <ExternalLink className="text-emerald-600" />
+              GeeksforGeeks Resources
             </h2>
 
             <ul className="space-y-3">
-              {topic.resources?.map((link, i) => (
-                <li key={i}>
-                  <a
-                    href={link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block p-4 rounded-2xl border border-slate-100 hover:border-blue-200 hover:bg-slate-50 transition text-blue-600 font-medium truncate"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
+              {topic.resources?.map((link, i) => {
+                const isGfg = link.includes("geeksforgeeks.org");
+                const targetUrl = isGfg ? link : `https://www.geeksforgeeks.org/search/?q=${encodeURIComponent(topic.title)}`;
+                return (
+                  <li key={i}>
+                    <a
+                      href={targetUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 p-3.5 rounded-xl border border-emerald-200/60 bg-emerald-50/40 hover:border-emerald-400 hover:bg-emerald-50 transition text-slate-800 font-medium group"
+                    >
+                      <div className="h-8 w-8 rounded-lg bg-emerald-500/15 text-emerald-600 flex items-center justify-center shrink-0">
+                        <ExternalLink size={15} />
+                      </div>
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wide">GeeksforGeeks</span>
+                        <span className="text-xs font-semibold text-slate-800 group-hover:text-emerald-700 truncate">
+                          {topic.title} Tutorial & Examples
+                        </span>
+                        <span className="text-[11px] text-slate-400 truncate font-mono mt-0.5">
+                          geeksforgeeks.org
+                        </span>
+                      </div>
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 

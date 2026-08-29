@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,114 +6,243 @@
 
 @layer base {
   :root {
-    --background: 260 40% 98%;
-    --foreground: 260 50% 5%;
+    --background: 215 28% 97%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 260 50% 5%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 260 50% 5%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 230 90% 60%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
- 
-    --secondary: 230 40% 95%;
-    --secondary-foreground: 230 50% 10%;
- 
-    --muted: 230 20% 94%;
-    --muted-foreground: 230 15% 40%;
- 
-    --accent: 190 95% 45%;
+
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 215 20% 93%;
+    --muted-foreground: 215 16% 45%;
+
+    --accent: 199 89% 48%;
     --accent-foreground: 0 0% 100%;
- 
-    --destructive: 0 84% 60%;
+
+    --destructive: 350 89% 60%;
     --destructive-foreground: 0 0% 100%;
- 
-    --border: 230 20% 90%;
-    --input: 230 20% 90%;
-    --ring: 230 90% 60%;
- 
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
+
     --radius: 1.25rem;
- 
-    /* Premium Indigo & Cyan Gradients */
-    --gradient-nebula: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-    --gradient-aurora: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+
+    /* Light Mode Gradients */
+    --gradient-nebula: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #0284c7 100%);
+    --gradient-aurora: linear-gradient(135deg, #3b82f6 0%, #0284c7 50%, #38bdf8 100%);
+    --gradient-sunfire: linear-gradient(135deg, #38bdf8 0%, #60a5fa 50%, #2563eb 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
   }
 
   .dark {
-    --background: 260 45% 4%;
-    --foreground: 260 20% 98%;
+    --background: 222 47% 7%;
+    --foreground: 210 40% 98%;
 
-    --card: 260 40% 7%;
-    --card-foreground: 260 20% 98%;
+    --card: 222 40% 11%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 260 40% 7%;
-    --popover-foreground: 260 20% 98%;
+    --popover: 222 40% 11%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 230 90% 70%;
-    --primary-foreground: 230 45% 4%;
- 
-    --secondary: 230 35% 12%;
-    --secondary-foreground: 230 20% 98%;
- 
-    --muted: 230 30% 10%;
-    --muted-foreground: 230 15% 70%;
- 
-    --accent: 190 100% 50%;
-    --accent-foreground: 230 45% 4%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 230 20% 98%;
- 
-    --border: 230 30% 15%;
-    --input: 230 30% 15%;
-    --ring: 230 90% 70%;
- 
-    --gradient-nebula: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #e879f9 100%);
-    --gradient-aurora: linear-gradient(135deg, #22d3ee 0%, #60a5fa 100%);
-    --gradient-surface: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.6) 100%);
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 7%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 15%;
+    --muted-foreground: 215 20% 70%;
+
+    --accent: 199 89% 60%;
+    --accent-foreground: 222 47% 7%;
+
+    --destructive: 350 75% 45%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 30% 18%;
+    --input: 217 30% 18%;
+    --ring: 217 91% 60%;
+
+    --gradient-nebula: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #38bdf8 100%);
+    --gradient-aurora: linear-gradient(135deg, #3b82f6 0%, #0284c7 50%, #38bdf8 100%);
+    --gradient-sunfire: linear-gradient(135deg, #38bdf8 0%, #60a5fa 50%, #2563eb 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
   }
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary;
-    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-background text-foreground antialiased selection:bg-emerald-500/30 selection:text-emerald-400;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
     @apply tracking-tight font-extrabold;
+  }
+
+  /* Custom Smooth Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.6);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.25);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(16, 185, 129, 0.5);
   }
 }
 
 @layer utilities {
+  /* Glassmorphism & Glow Utilities */
   .glass {
-    @apply bg-white/20 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
+    @apply bg-white/60 backdrop-blur-2xl border border-white/70 shadow-[0_8px_32px_0_rgba(37,99,235,0.08)];
   }
   .glass-dark {
-    @apply bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
+    @apply bg-[#0b1329]/80 backdrop-blur-2xl border border-blue-500/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.6)];
   }
+  .glass-glow {
+    @apply bg-[#0d1b3a]/85 backdrop-blur-2xl border border-emerald-500/30 shadow-[0_0_50px_-10px_rgba(16,185,129,0.25)];
+  }
+  .glass-card {
+    @apply bg-card/85 backdrop-blur-xl border border-border hover:border-emerald-500/50 hover:shadow-[0_10px_35px_-5px_rgba(16,185,129,0.2)] transition-all duration-300;
+  }
+
+  /* Grid & Dot Background Patterns */
+  .bg-grid-pattern {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(59, 130, 246, 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(59, 130, 246, 0.07) 1px, transparent 1px);
+  }
+  .bg-dots-pattern {
+    background-image: radial-gradient(rgba(59, 130, 246, 0.14) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+  }
+  .bg-radial-gradient {
+    background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.08) 45%, transparent 80%);
+  }
+
+  /* Text Gradients */
   .text-nebula {
-    @apply bg-clip-text text-transparent bg-gradient-to-br from-indigo-400 via-cyan-500 to-blue-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-700 via-indigo-600 to-sky-600 dark:from-blue-400 dark:via-indigo-300 dark:to-sky-400 animate-shimmer;
+    background-size: 200% auto;
   }
   .text-aurora {
-    @apply bg-clip-text text-transparent bg-gradient-to-br from-indigo-400 via-cyan-500 to-blue-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-700 via-blue-600 to-cyan-600 dark:from-indigo-400 dark:via-blue-400 dark:to-sky-400 animate-shimmer;
+    background-size: 200% auto;
+  }
+  .text-sunfire {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-sky-600 via-indigo-600 to-blue-700 dark:from-sky-400 dark:via-indigo-300 dark:to-blue-400 animate-shimmer;
+    background-size: 200% auto;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400;
   }
   .bg-gradient-nebula {
-    @apply bg-gradient-to-br from-indigo-600 via-cyan-600 to-blue-600;
+    @apply bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500;
+  }
+  .bg-gradient-aurora {
+    @apply bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-500;
+  }
+  .card-hover {
+    @apply transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_40px_-10px_rgba(16,185,129,0.25)] hover:border-emerald-500/50;
+  }
+
+  /* Custom Animations & Keyframes */
+  .animate-shimmer {
+    animation: textShimmer 5s linear infinite;
   }
   .animate-float-slow {
     animation: float 8s ease-in-out infinite;
+  }
+  .animate-float-reverse {
+    animation: floatReverse 9s ease-in-out infinite;
+  }
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  .animate-glow-pulse {
+    animation: glowPulse 6s ease-in-out infinite;
+  }
+  .animate-orb-1 {
+    animation: orbFloat1 18s ease-in-out infinite;
+  }
+  .animate-orb-2 {
+    animation: orbFloat2 22s ease-in-out infinite;
+  }
+  .animate-spin-slow {
+    animation: spinSlow 25s linear infinite;
+  }
+  .animate-bounce-subtle {
+    animation: bounceSubtle 3s ease-in-out infinite;
+  }
+  .animate-border-glow {
+    animation: borderGlow 6s ease infinite;
+  }
+
+  @keyframes textShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
   @keyframes float {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     33% { transform: translateY(-15px) rotate(2deg); }
     66% { transform: translateY(-5px) rotate(-1deg); }
   }
+  @keyframes floatReverse {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    33% { transform: translateY(12px) rotate(-2deg); }
+    66% { transform: translateY(4px) rotate(1deg); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.02); }
+  }
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.35; filter: blur(45px); }
+    50% { opacity: 0.7; filter: blur(75px); }
+  }
+  @keyframes orbFloat1 {
+    0%, 100% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(60px, -70px) scale(1.2); }
+    66% { transform: translate(-40px, 40px) scale(0.9); }
+  }
+  @keyframes orbFloat2 {
+    0%, 100% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(-70px, 50px) scale(1.15); }
+    66% { transform: translate(50px, -60px) scale(0.85); }
+  }
+  @keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes bounceSubtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes borderGlow {
+    0%, 100% { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+    50% { border-color: rgba(56, 189, 248, 0.6); box-shadow: 0 0 35px rgba(56, 189, 248, 0.4); }
+  }
 }
-

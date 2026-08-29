@@ -24,7 +24,8 @@ interface AuthContextType {
   completedTopics: string[];
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<{ error?: string }>;
-  signup: (name: string, email: string, password: string) => Promise<{ error?: string }>;
+  googleLogin: (idToken: string) => Promise<{ error?: string }>;
+  signup: (name: string, email: string, password: string) => Promise<{ error?: string, message?: string }>;
   logout: () => void;
   fetchRoadmap: () => Promise<void>;
   toggleTopicComplete: (topicTitle: string) => Promise<void>;
@@ -108,13 +109,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem("user", JSON.stringify(res.user));
       localStorage.setItem("token", res.token);
 
-      // Refresh data after login
-      await fetchInitialData();
+      // Refresh data after login asynchronously
+      fetchInitialData().catch((err) => console.error("[AuthContext] Error prefetching data after login:", err));
 
       return {};
     } catch (error: unknown) {
       console.error("[AuthContext] Login error:", error);
-      const message = error instanceof Error ? error.message : "Login failed";
+      const err = error as { response?: { data?: { error?: string; message?: string } }; message?: string };
+      const backendMessage = err.response?.data?.error || err.response?.data?.message;
+      const message = backendMessage || err.message || "Login failed";
+      return { error: message };
+    }
+  };
+
+  // ================= GOOGLE LOGIN =================
+
+  const googleLogin = async (idToken: string) => {
+    try {
+      const res = await authService.googleLogin(idToken);
+
+      setUser(res.user);
+      setToken(res.token);
+
+      localStorage.setItem("user", JSON.stringify(res.user));
+      localStorage.setItem("token", res.token);
+
+      fetchInitialData().catch((err) => console.error("[AuthContext] Error prefetching data after Google login:", err));
+      return {};
+    } catch (error: unknown) {
+      console.error("[AuthContext] Google Login error:", error);
+      const err = error as { response?: { data?: { error?: string; message?: string } }; message?: string };
+      const message = err.response?.data?.error || err.message || "Google Login failed";
       return { error: message };
     }
   };
@@ -124,20 +149,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signup = async (name: string, email: string, password: string) => {
     try {
       const res = await authService.signup({ name, email, password });
-
-      setUser(res.user);
-      setToken(res.token);
-
-      localStorage.setItem("user", JSON.stringify(res.user));
-      localStorage.setItem("token", res.token);
-
-      return {};
-    } catch (error: any) {
+      
+      // Since we now have email verification, we don't log the user in immediately
+      // The backend returns a message instead of user/token
+      return { message: res.message || "Please check your email to verify your account." };
+    } catch (error: unknown) {
       console.error("[AuthContext] Signup error:", error);
       
       // Extract backend error message if available
-      const backendMessage = error.response?.data?.error || error.response?.data?.message;
-      const message = backendMessage || error.message || "Signup failed";
+      const err = error as { response?: { data?: { error?: string; message?: string } }; message?: string };
+      const backendMessage = err.response?.data?.error || err.response?.data?.message;
+      const message = backendMessage || err.message || "Signup failed";
       
       return { error: message };
     }
@@ -197,6 +219,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         completedTopics,
         isAuthenticated: !!user,
         login,
+        googleLogin,
         signup,
         logout,
         fetchRoadmap,

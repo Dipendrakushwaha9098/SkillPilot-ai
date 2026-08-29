@@ -3,8 +3,18 @@ const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  email: { 
+    type: String, 
+    required: true, 
+    unique: true,
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      'Please fill a valid email address'
+    ]
+  },
+  password: { type: String, required: function() { return !this.googleId; } },
+  googleId: { type: String, sparse: true, unique: true },
+  avatarUrl: { type: String },
   skillLevel: { type: String, enum: ['Beginner', 'Intermediate', 'Advanced'], default: 'Beginner' },
   interests: [String],
   goals: String,
@@ -17,6 +27,16 @@ const userSchema = new mongoose.Schema({
     streak: { type: Number, default: 0 },
     lastActive: { type: Date, default: Date.now }
   },
+  learnedProfile: {
+    preferredStyle: { type: String, default: "" },
+    weakTopics: [String],
+    masteredTopics: [String],
+    customNotes: [String],
+    lastUpdated: Date
+  },
+  isVerified: { type: Boolean, default: false },
+  verificationToken: String,
+  verificationTokenExpires: Date,
   createdAt: { type: Date, default: Date.now }
 });
 

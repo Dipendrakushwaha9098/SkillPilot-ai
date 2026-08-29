@@ -15,10 +15,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Disable query buffering so Mongoose fails fast when Mongo is offline
+mongoose.set('bufferCommands', false);
+
 // Database Connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+mongoose.connect(process.env.MONGODB_URI, { serverSelectionTimeoutMS: 3000 })
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch(err => console.log('MongoDB connection warning (resilient in-memory fallback active):', err.message));
 
 // Routes
 const authRoutes = require('./routes/authRoutes');

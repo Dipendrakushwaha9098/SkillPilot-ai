@@ -96,9 +96,9 @@ const tokenStore = {
    Cache
 ───────────────────────────────────────── */
 class RequestCache {
-  private store = new Map<string, any>();
+  private store = new Map<string, { data: unknown; expires: number }>();
 
-  set(key: string, data: any) {
+  set(key: string, data: unknown) {
     this.store.set(key, {
       data,
       expires: Date.now() + CACHE_TTL_MS,
@@ -137,6 +137,18 @@ api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const isLoginRequest = error.config?.url?.includes("/auth/login");
+    if (error.response && error.response.status === 401 && !isLoginRequest) {
+      // Auto logout on 401, but not on login attempts
+      authService.logout();
+    }
+    return Promise.reject(error);
+  }
+);
+
 /* ─────────────────────────────────────────
    Helpers
 ───────────────────────────────────────── */
@@ -160,8 +172,8 @@ async function cachedGet<T>(url: string): Promise<T> {
    ================= AUTH =================
 ───────────────────────────────────────── */
 export const authService = {
-  async signup(userData: AuthData): Promise<AuthResponse> {
-    const { data } = await api.post<AuthResponse>("/auth/signup", userData);
+  async signup(userData: AuthData): Promise<AuthResponse & { message?: string }> {
+    const { data } = await api.post<AuthResponse & { message?: string }>("/auth/signup", userData);
     return data;
   },
 
@@ -171,6 +183,15 @@ export const authService = {
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
 
+    return data;
+  },
+
+  async googleLogin(token: string): Promise<AuthResponse> {
+    const { data } = await api.post<AuthResponse>("/auth/google", { token });
+    
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    
     return data;
   },
 
@@ -193,7 +214,7 @@ export const authService = {
    =============== ROADMAP ================
 ───────────────────────────────────────── */
 export const roadmapService = {
-  async generate(request: any): Promise<Roadmap> {
+  async generate(request: unknown): Promise<Roadmap> {
     const { data } = await api.post<Roadmap>("/roadmap/generate", request);
     return data;
   },
@@ -210,15 +231,15 @@ export const roadmapService = {
     return cachedGet<Topic>(`/roadmap/topics/${topicId}`);
   },
 
-  async generateAssessment(skillLevel: string, interests: string[]): Promise<any[]> {
+  async generateAssessment(skillLevel: string, interests: string[]): Promise<unknown[]> {
     const { data } = await api.post("/roadmap/assessment", { skillLevel, interests });
     return data;
   },
 
   /* 🔥 FIXED WEEKLY TEST */
-  async getWeeklyTest(): Promise<any> {
+  async getWeeklyTest(): Promise<{ week: number; title: string; questions: { question: string; options: string[]; answer: string }[] } | null> {
     try {
-      const data = await cachedGet<any>("/roadmap/weekly-test");
+      const data = await cachedGet<{ week: number; title: string; questions: { question: string; options: string[]; answer: string }[] }>("/roadmap/weekly-test");
 
       console.log("✅ Weekly Test API Response:", data);
 
@@ -263,7 +284,7 @@ export const progressService = {
    =============== MENTOR =================
 ───────────────────────────────────────── */
 export const mentorService = {
-  async chat(payload: { message: string; history: any[] }): Promise<{ reply: string }> {
+  async chat(payload: { message: string; history: { role: string; parts: string | { text: string }[] }[]; conciseMode?: boolean; mode?: string }): Promise<{ reply: string; learnedProfile?: any }> {
     const { data } = await api.post("/mentor/chat", payload);
     return data;
   },

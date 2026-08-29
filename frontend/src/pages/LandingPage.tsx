@@ -35,14 +35,14 @@ function FadeIn({ children, delay = 0, className = '', up = true }: {
  
 // ─── Data ──────────────────────────────────────────────────────────────────
 const skills = [
-  { icon: Code2, label: 'Web Development' },
-  { icon: Palette, label: 'UI Design' },
-  { icon: Brain, label: 'Data Science' },
-  { icon: Music, label: 'Music Production' },
-  { icon: Globe, label: 'Languages' },
-  { icon: TrendingUp, label: 'Finance' },
-  { icon: BookOpen, label: 'Creative Writing' },
-  { icon: Sparkles, label: 'AI & ML' },
+  { icon: Code2, label: 'React & Next.js' },
+  { icon: BookOpen, label: 'Node & Python Backend' },
+  { icon: Brain, label: 'PostgreSQL & MongoDB' },
+  { icon: TrendingUp, label: 'Docker & AWS DevOps' },
+  { icon: Globe, label: 'REST & GraphQL APIs' },
+  { icon: Sparkles, label: 'System Design' },
+  { icon: Palette, label: 'Tailwind & Modern UI' },
+  { icon: Music, label: 'Microservices & Cloud' },
 ];
  
 const steps = [
@@ -57,22 +57,22 @@ const testimonials = [
   {
     name: 'Priya M.', role: 'Junior → Senior Dev in 8 months',
     quote: 'SkillPilot mapped out exactly what I was missing. The mentor answered every question I was afraid to ask Stack Overflow.',
-    rating: 5, avatar: 'PM', color: '#d946ef',
+    rating: 5, avatar: 'PM', color: '#3b82f6', image: '/images/learner_success_portrait.jpg'
   },
   {
     name: 'Lucas T.', role: 'Career-changer, now UX Designer',
     quote: 'I tried five different courses and kept stalling. The personalised roadmap finally gave me a clear path I actually stuck to.',
-    rating: 5, avatar: 'LT', color: '#8b5cf6',
+    rating: 5, avatar: 'LT', color: '#8b5cf6', image: '/images/student_learning_laptop.jpg'
   },
   {
     name: 'Aisha K.', role: 'Data Analyst at a Series B startup',
     quote: "From zero Python to landing my first data role. I genuinely don't think I'd have done it without the AI mentor keeping me accountable.",
-    rating: 5, avatar: 'AK', color: '#2dd4bf',
+    rating: 5, avatar: 'AK', color: '#0284c7', image: '/images/developer_workspace_photo.jpg'
   },
   {
     name: 'Marco R.', role: 'Freelance developer, 2× income',
     quote: "The roadmap cut through the noise. Six months in, I doubled my freelance rate and actually understand system design now.",
-    rating: 5, avatar: 'MR', color: '#ec4899',
+    rating: 5, avatar: 'MR', color: '#6366f1', image: '/images/learner_success_portrait.jpg'
   },
 ];
 
@@ -110,43 +110,43 @@ const footerLinks = {
 
 // ─── Theme tokens ──────────────────────────────────────────────────────────
 const DARK = {
-  bg: '#0a0514',
-  bgAlt: 'rgba(99, 102, 241, 0.03)',
-  surface: 'rgba(255, 255, 255, 0.03)',
-  surfaceHover: 'rgba(255, 255, 255, 0.06)',
-  border: 'rgba(99, 102, 241, 0.12)',
-  borderStrong: 'rgba(99, 102, 241, 0.25)',
+  bg: 'transparent',
+  bgAlt: 'rgba(37, 99, 235, 0.04)',
+  surface: 'rgba(15, 23, 42, 0.75)',
+  surfaceHover: 'rgba(15, 23, 42, 0.9)',
+  border: 'rgba(59, 130, 246, 0.2)',
+  borderStrong: 'rgba(59, 130, 246, 0.4)',
   text: '#f8fafc',
-  textMuted: 'rgba(248, 250, 252, 0.6)',
-  textFaint: 'rgba(248, 250, 252, 0.35)',
-  navBg: 'rgba(10, 5, 20, 0.85)',
-  accent: '#06b6d4',
-  accentAlt: '#6366f1',
-  accentText: '#0a0514',
-  cardGrad: 'linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(6, 182, 212, 0.03) 100%)',
-  blob1: 'rgba(99, 102, 241, 0.15)',
-  blob2: 'rgba(6, 182, 212, 0.12)',
-  blob3: 'rgba(34, 211, 238, 0.1)',
+  textMuted: '#cbd5e1',
+  textFaint: '#94a3b8',
+  navBg: 'rgba(10, 15, 29, 0.85)',
+  accent: '#3b82f6',
+  accentAlt: '#0284c7',
+  accentText: '#ffffff',
+  cardGrad: 'linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(56, 189, 248, 0.05) 100%)',
+  blob1: 'rgba(37, 99, 235, 0.22)',
+  blob2: 'rgba(2, 132, 199, 0.18)',
+  blob3: 'rgba(99, 102, 241, 0.15)',
 };
 
 const LIGHT = {
-  bg: '#fafafa',
-  bgAlt: 'rgba(99, 102, 241, 0.04)',
+  bg: 'transparent',
+  bgAlt: 'rgba(37, 99, 235, 0.05)',
   surface: 'rgba(255, 255, 255, 0.95)',
   surfaceHover: 'rgba(255, 255, 255, 1)',
-  border: 'rgba(99, 102, 241, 0.15)',
-  borderStrong: 'rgba(99, 102, 241, 0.35)',
+  border: 'rgba(37, 99, 235, 0.2)',
+  borderStrong: 'rgba(37, 99, 235, 0.4)',
   text: '#0f172a',
-  textMuted: 'rgba(15, 23, 42, 0.6)',
-  textFaint: 'rgba(15, 23, 42, 0.35)',
-  navBg: 'rgba(250, 250, 250, 0.9)',
-  accent: '#6366f1',
-  accentAlt: '#06b6d4',
+  textMuted: '#334155',
+  textFaint: '#475569',
+  navBg: 'rgba(241, 245, 249, 0.9)',
+  accent: '#2563eb',
+  accentAlt: '#0284c7',
   accentText: '#ffffff',
-  cardGrad: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 247, 255, 0.9) 100%)',
-  blob1: 'rgba(99, 102, 241, 0.12)',
-  blob2: 'rgba(6, 182, 212, 0.10)',
-  blob3: 'rgba(34, 211, 238, 0.08)',
+  cardGrad: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(239, 246, 255, 0.9) 100%)',
+  blob1: 'rgba(37, 99, 235, 0.15)',
+  blob2: 'rgba(2, 132, 199, 0.12)',
+  blob3: 'rgba(99, 102, 241, 0.1)',
 };
 
  
@@ -209,7 +209,13 @@ function TestimonialCarousel({ theme }: { theme: typeof DARK }) {
         </div>
         <p style={{ color: theme.text, fontSize: '17px', lineHeight: 1.7, marginBottom: '32px' }}>"{t.quote}"</p>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '13px', background: t.color, color: '#fff', flexShrink: 0 }}>{t.avatar}</div>
+          <div style={{ width: '52px', height: '52px', borderRadius: '16px', overflow: 'hidden', border: `2px solid ${t.color}`, flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+            {t.image ? (
+              <img src={t.image} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '13px', background: t.color, color: '#fff' }}>{t.avatar}</div>
+            )}
+          </div>
           <div>
             <p style={{ fontWeight: 700, color: theme.text }}>{t.name}</p>
             <p style={{ fontSize: '13px', color: theme.textMuted }}>{t.role}</p>
@@ -301,7 +307,32 @@ function AnimatedHeadline({ accent }: { accent: string }) {
  
 // ─── Main Component ────────────────────────────────────────────────────────
 const LandingPage = () => {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) return saved === "dark";
+    return document.documentElement.classList.contains("dark");
+  });
+
+  useEffect(() => {
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+
+    checkTheme();
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "class") {
+          checkTheme();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    return () => observer.disconnect();
+  }, []);
+
   const theme = isDark ? DARK : LIGHT;
 
   return (
@@ -345,9 +376,9 @@ const LandingPage = () => {
  
       {/* Ambient blobs */}
       <div style={{ position: 'fixed', inset: 0, zIndex: -1, overflow: 'hidden', pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', top: '-10%', left: '-5%', width: '600px', height: '600px', borderRadius: '50%', background: `radial-gradient(circle, ${theme.blob1} 0%, transparent 70%)`, filter: 'blur(1px)', transition: 'background 0.4s' }} />
-        <div style={{ position: 'absolute', top: '30%', right: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: `radial-gradient(circle, ${theme.blob2} 0%, transparent 70%)`, filter: 'blur(1px)', transition: 'background 0.4s' }} />
-        <div style={{ position: 'absolute', bottom: '-5%', left: '20%', width: '400px', height: '400px', borderRadius: '50%', background: `radial-gradient(circle, ${theme.blob3} 0%, transparent 70%)`, filter: 'blur(1px)', transition: 'background 0.4s' }} />
+        <div className="animate-orb-1" style={{ position: 'absolute', top: '-10%', left: '-5%', width: '600px', height: '600px', borderRadius: '50%', background: `radial-gradient(circle, ${theme.blob1} 0%, transparent 70%)`, filter: 'blur(40px)', transition: 'background 0.4s' }} />
+        <div className="animate-orb-2" style={{ position: 'absolute', top: '30%', right: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: `radial-gradient(circle, ${theme.blob2} 0%, transparent 70%)`, filter: 'blur(40px)', transition: 'background 0.4s' }} />
+        <div className="animate-orb-1" style={{ position: 'absolute', bottom: '-5%', left: '20%', width: '400px', height: '400px', borderRadius: '50%', background: `radial-gradient(circle, ${theme.blob3} 0%, transparent 70%)`, filter: 'blur(40px)', transition: 'background 0.4s' }} />
       </div>
       {/* ── Hero ── */}
       <header style={{ paddingTop: '160px', paddingBottom: '120px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
@@ -405,7 +436,7 @@ const LandingPage = () => {
               See how it works
             </a>
           </div>
- 
+
           {/* Social proof */}
           <div style={{
             animation: 'fadeDown 0.6s ease 0.45s both', marginTop: '52px',
@@ -418,8 +449,6 @@ const LandingPage = () => {
               </span>
             ))}
           </div>
- 
-          {/* Stats */}
           <div style={{
             animation: 'fadeDown 0.6s ease 0.55s both', marginTop: '64px',
             display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px',
@@ -434,9 +463,28 @@ const LandingPage = () => {
               </div>
             ))}
           </div>
+
+          {/* 3D Dashboard Showcase Image */}
+          <div style={{ animation: 'fadeDown 0.6s ease 0.65s both', marginTop: '56px', position: 'relative' }}>
+            <div className="hover-lift" style={{
+              borderRadius: '24px', padding: '12px',
+              background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(56, 189, 248, 0.1) 100%)',
+              boxShadow: '0 25px 60px -15px rgba(37, 99, 235, 0.25)',
+              border: `1px solid ${theme.borderStrong}`,
+            }}>
+              <img 
+                src="/images/hero_dashboard_mockup.jpg" 
+                alt="SkillPilot AI Interactive Dashboard Preview" 
+                style={{
+                  width: '100%', borderRadius: '18px', display: 'block',
+                  boxShadow: '0 10px 35px rgba(0,0,0,0.15)'
+                }} 
+              />
+            </div>
+          </div>
         </div>
       </header>
- 
+
       {/* ── Skills ticker ── */}
       <div style={{ borderTop: `1px solid ${theme.border}`, borderBottom: `1px solid ${theme.border}`, background: theme.bgAlt, padding: '16px 0', overflow: 'hidden', transition: 'all 0.4s' }}>
         <div style={{ display: 'flex', gap: '48px', whiteSpace: 'nowrap', animation: 'marquee 24s linear infinite' }}>
@@ -447,7 +495,7 @@ const LandingPage = () => {
           ))}
         </div>
       </div>
- 
+
       {/* ── Features ── */}
       <section style={{ padding: '100px 24px' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
@@ -457,31 +505,67 @@ const LandingPage = () => {
           </FadeIn>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginTop: '64px' }}>
             {[
-              { icon: Brain, color: '#d946ef', bg: 'rgba(217,70,239,0.08)', title: 'AI Skill Assessment', body: 'A short adaptive quiz pinpoints exactly where you are. No generic beginner content — your plan starts at your level.' },
-              { icon: Target, color: '#8b5cf6', bg: 'rgba(139,92,246,0.08)', title: 'Custom Roadmaps', body: 'A structured 3-month path with curated resources, real projects, and clear milestones, generated in seconds.' },
-              { icon: Zap, color: '#2dd4bf', bg: 'rgba(45,212,191,0.08)', title: 'AI Mentor 24/7', body: 'Stuck on a concept? Your mentor explains it, reviews your code, and adjusts your plan when life happens.' },
-            ].map(({ icon: Icon, color, bg, title, body }, i) => (
+              { icon: Brain, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)', title: 'AI Skill Assessment', body: 'A short adaptive quiz pinpoints exactly where you are. No generic beginner content — your plan starts at your level.', img: '/images/learning_roadmap_preview.jpg' },
+              { icon: Target, color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)', title: 'Custom Roadmaps', body: 'A structured 3-month path with curated resources, real projects, and clear milestones, generated in seconds.', img: '/images/hero_dashboard_mockup.jpg' },
+              { icon: Zap, color: '#0284c7', bg: 'rgba(2,132,199,0.1)', title: 'AI Mentor 24/7', body: 'Stuck on a concept? Your mentor explains it, reviews your code, and adjusts your plan when life happens.', img: '/images/ai_mentor_avatar.jpg' },
+            ].map(({ icon: Icon, color, bg, title, body, img }, i) => (
 
               <FadeIn key={title} delay={i * 100}>
                 <div className="hover-lift" style={{
-                  padding: '32px', borderRadius: '20px',
+                  padding: '24px', borderRadius: '24px',
                   background: theme.surface, border: `1px solid ${theme.border}`,
                   transition: 'border-color 0.3s ease, background 0.4s',
-                  boxShadow: theme === LIGHT ? '0 2px 16px rgba(59,130,246,0.06)' : 'none',
+                  boxShadow: theme === LIGHT ? '0 4px 20px rgba(59,130,246,0.06)' : 'none',
+                  display: 'flex', flexDirection: 'column', height: '100%'
                 }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
-                    <Icon size={22} color={color} />
+                  <div style={{ borderRadius: '16px', overflow: 'hidden', marginBottom: '20px', height: '160px' }}>
+                    <img src={img} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
-                  <h3 className="font-display" style={{ fontSize: '18px', fontWeight: 700, color: theme.text, marginBottom: '10px', transition: 'color 0.4s' }}>{title}</h3>
-                  <p style={{ fontSize: '14px', color: theme.textMuted, lineHeight: 1.7, transition: 'color 0.4s' }}>{body}</p>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                    <Icon size={20} color={color} />
+                  </div>
+                  <h3 className="font-display" style={{ fontSize: '18px', fontWeight: 700, color: theme.text, marginBottom: '8px', transition: 'color 0.4s' }}>{title}</h3>
+                  <p style={{ fontSize: '14px', color: theme.textMuted, lineHeight: 1.6, transition: 'color 0.4s', flex: 1 }}>{body}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
         </div>
       </section>
- 
-      {/* ── How it works ── */}
+
+      {/* ── Real-World Success & Workspace Showcase ── */}
+      <section style={{ padding: '80px 24px', background: theme.bgAlt, borderTop: `1px solid ${theme.border}`, borderBottom: `1px solid ${theme.border}` }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '48px', alignItems: 'center' }}>
+            <FadeIn>
+              <div className="hover-lift" style={{ borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', border: `1px solid ${theme.borderStrong}` }}>
+                <img src="/images/student_learning_laptop.jpg" alt="Developer learning with SkillPilot AI" style={{ width: '100%', display: 'block', height: '360px', objectFit: 'cover' }} />
+              </div>
+            </FadeIn>
+            <FadeIn delay={150}>
+              <div>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: theme.accent, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>Real-World Experience</span>
+                <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 38px)', fontWeight: 800, color: theme.text, marginBottom: '20px', lineHeight: 1.2 }}>
+                  Engineered for real-world developer workflows
+                </h2>
+                <p style={{ fontSize: '15px', color: theme.textMuted, lineHeight: 1.7, marginBottom: '28px' }}>
+                  SkillPilot integrates directly into your daily learning routine. Whether preparing for technical interviews, upskilling in a new stack, or building production apps, our AI mentor keeps you in deep flow state.
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div style={{ padding: '20px', borderRadius: '18px', background: theme.surface, border: `1px solid ${theme.border}` }}>
+                    <div className="font-display" style={{ fontSize: '28px', fontWeight: 800, color: theme.accent }}>10k+</div>
+                    <div style={{ fontSize: '13px', color: theme.textMuted, marginTop: '4px' }}>Active Mentorship Hours</div>
+                  </div>
+                  <div style={{ padding: '20px', borderRadius: '18px', background: theme.surface, border: `1px solid ${theme.border}` }}>
+                    <div className="font-display" style={{ fontSize: '28px', fontWeight: 800, color: theme.accent }}>88%</div>
+                    <div style={{ fontSize: '13px', color: theme.textMuted, marginTop: '4px' }}>Career Advancement Rate</div>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
       <section id="how" style={{ padding: '100px 24px', background: theme.bgAlt, transition: 'background 0.4s' }}>
         <div style={{ maxWidth: '720px', margin: '0 auto' }}>
           <FadeIn>

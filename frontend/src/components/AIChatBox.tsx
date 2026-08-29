@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { mentorService } from "@/services/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface Message {
   role: "user" | "model";
@@ -22,6 +22,7 @@ const AIChatBox = () => {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -57,7 +58,7 @@ const AIChatBox = () => {
     }
   }, [input, loading, messages]);
 
-  if (!isAuthenticated || !user) return null;
+  if (!isAuthenticated || !user || location.pathname === "/chat") return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-[100] font-sans">
@@ -88,32 +89,32 @@ const AIChatBox = () => {
               width: "360px"
             }}
             exit={{ y: 100, opacity: 0, scale: 0.9 }}
-            className="bg-[#11111a] border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+            className="bg-card border border-border rounded-3xl shadow-2xl overflow-hidden flex flex-col"
           >
             {/* Header */}
-            <div className="p-4 bg-white/5 border-bottom border-white/5 flex items-center justify-between">
+            <div className="p-4 bg-muted/40 border-b border-border flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-cyan-600 flex items-center justify-center text-white">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white">
                   <Bot size={18} />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white leading-tight">AI Mentor</h3>
+                  <h3 className="text-sm font-bold text-foreground leading-tight">AI Mentor</h3>
                   <div className="flex items-center gap-1.5">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Online</span>
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Online</span>
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-1">
                 <button 
                   onClick={() => setIsMinimized(!isMinimized)}
-                  className="p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
                 >
                   {isMinimized ? <Maximize2 size={16} /> : <Minimize2 size={16} />}
                 </button>
                 <button 
                   onClick={() => setIsOpen(false)}
-                  className="p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
                 >
                   <X size={16} />
                 </button>
@@ -128,10 +129,10 @@ const AIChatBox = () => {
                     <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                       <div className={`max-w-[85%] p-3 rounded-2xl text-sm ${
                         msg.role === "user" 
-                          ? "bg-purple-600 text-white rounded-tr-none" 
-                          : "bg-white/5 text-white/80 border border-white/10 rounded-tl-none"
+                          ? "bg-emerald-600 text-white rounded-tr-none" 
+                          : "bg-muted text-foreground border border-border rounded-tl-none"
                       }`}>
-                        <div className="prose prose-invert prose-sm max-w-none">
+                        <div className="prose prose-sm max-w-none text-current">
                           <ReactMarkdown>{msg.parts[0].text}</ReactMarkdown>
                         </div>
                       </div>
@@ -139,8 +140,8 @@ const AIChatBox = () => {
                   ))}
                   {loading && (
                     <div className="flex justify-start">
-                      <div className="bg-white/5 border border-white/10 p-3 rounded-2xl rounded-tl-none">
-                        <Loader2 className="w-4 h-4 text-purple-400 animate-spin" />
+                      <div className="bg-muted border border-border p-3 rounded-2xl rounded-tl-none">
+                        <Loader2 className="w-4 h-4 text-emerald-400 animate-spin" />
                       </div>
                     </div>
                   )}
@@ -148,28 +149,28 @@ const AIChatBox = () => {
                 </div>
 
                 {/* Input */}
-                <div className="p-4 bg-white/5 border-t border-white/5">
-                  <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-2xl p-2 focus-within:border-purple-500/50 transition-all">
+                <div className="p-4 bg-muted/40 border-t border-border">
+                  <div className="flex items-center gap-2 bg-background border border-border rounded-2xl p-2 focus-within:border-emerald-500/50 transition-all">
                     <input
                       type="text"
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && handleSend()}
                       placeholder="Ask anything..."
-                      className="flex-1 bg-transparent border-none focus:ring-0 text-sm text-white placeholder:text-white/20 px-2"
+                      className="flex-1 bg-transparent border-none focus:ring-0 text-sm text-foreground placeholder:text-muted-foreground/60 px-2"
                     />
                     <button 
                       onClick={handleSend}
                       disabled={!input.trim() || loading}
-                      className="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center disabled:opacity-50 disabled:scale-100 active:scale-90 transition-all"
+                      className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center disabled:opacity-50 disabled:scale-100 active:scale-90 transition-all"
                     >
                       <Send size={14} />
                     </button>
                   </div>
                   <div className="mt-3 flex items-center justify-between px-1">
                     <div className="flex items-center gap-1.5">
-                      <Sparkles size={10} className="text-purple-400" />
-                      <span className="text-[10px] text-white/30">Gemini 3 Powered</span>
+                      <Sparkles size={10} className="text-emerald-400" />
+                      <span className="text-[10px] text-muted-foreground">Gemini 3 Powered</span>
                     </div>
                     <button 
                       onClick={() => navigate("/chat")}

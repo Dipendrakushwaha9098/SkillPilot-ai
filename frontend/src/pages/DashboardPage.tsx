@@ -146,20 +146,70 @@ const DashboardPage = () => {
  
   if (!roadmap || !roadmap.months) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 pt-16 px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center"
-        >
-          <h1 className="font-display text-3xl font-bold mb-3">Your journey begins here</h1>
-          <p className="text-muted-foreground text-center max-w-sm mb-6">
-            Complete the assessment to get your AI-powered personalized learning path.
-          </p>
-          <Link to="/assessment">
-            <Button variant="hero" className="rounded-xl px-8">Take Assessment</Button>
-          </Link>
-        </motion.div>
+      <div className="min-h-screen bg-background pt-24 pb-16 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+        {/* Ambient background glow */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+          <div className="animate-orb-1 absolute top-[15%] left-[20%] w-[500px] h-[500px] rounded-full bg-blue-600/15 blur-[120px]" />
+          <div className="animate-orb-2 absolute bottom-[20%] right-[20%] w-[450px] h-[450px] rounded-full bg-indigo-500/15 blur-[120px]" />
+        </div>
+
+        <div className="container mx-auto max-w-3xl relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="rounded-[2.5rem] border border-border bg-card/80 backdrop-blur-2xl p-8 sm:p-12 shadow-2xl"
+          >
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-500/30 animate-float-slow">
+              <Sparkles size={38} />
+            </div>
+
+            <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-foreground mb-4">
+              Your Learning Journey Begins Here
+            </h1>
+            <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
+              Complete your quick 2-minute skill assessment to generate your personalized 3-month AI roadmap, or start chatting directly with your 24/7 AI Mentor.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+              <Link to="/assessment" className="w-full sm:w-auto">
+                <Button variant="hero" className="w-full sm:w-auto h-14 rounded-2xl px-8 font-bold text-lg shadow-lg shadow-blue-500/25 transition-all flex items-center justify-center gap-2">
+                  Take Skill Assessment <ArrowRight size={20} />
+                </Button>
+              </Link>
+              <Link to="/chat" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full sm:w-auto h-14 rounded-2xl px-8 font-bold text-lg border-border hover:bg-muted/50 transition-all flex items-center justify-center gap-2">
+                  <MessageSquare size={20} /> Ask AI Mentor
+                </Button>
+              </Link>
+            </div>
+
+            {/* Quick Feature Grid */}
+            <div className="grid sm:grid-cols-3 gap-4 pt-8 border-t border-border">
+              <div className="p-4 rounded-2xl bg-muted/40 text-left border border-border/50">
+                <div className="h-9 w-9 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center mb-3">
+                  <BookOpen size={18} />
+                </div>
+                <h3 className="font-bold text-sm text-foreground mb-1">Adaptive Roadmaps</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Tailored month-by-month study plan generated specifically for your career goals.</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-muted/40 text-left border border-border/50">
+                <div className="h-9 w-9 rounded-xl bg-indigo-500/15 text-indigo-400 flex items-center justify-center mb-3">
+                  <MessageSquare size={18} />
+                </div>
+                <h3 className="font-bold text-sm text-foreground mb-1">24/7 AI Mentor</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Instant code reviews, concept explanations, and personalized guidance anytime.</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-muted/40 text-left border border-border/50">
+                <div className="h-9 w-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-3">
+                  <Trophy size={18} />
+                </div>
+                <h3 className="font-bold text-sm text-foreground mb-1">Weekly Tests</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Interactive Saturday quizzes to measure your knowledge and validate your progress.</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     );
   }
@@ -202,7 +252,14 @@ const DashboardPage = () => {
   const isSaturday = new Date().getDay() === 6;
 
   return (
-    <div className="min-h-screen bg-background pt-20 pb-16">
+    <div className="min-h-screen bg-background bg-grid-pattern bg-radial-gradient pt-20 pb-16 relative overflow-hidden">
+      {/* Background Animated Ambient Orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="animate-orb-1 absolute top-[10%] left-[-5%] w-[550px] h-[550px] rounded-full bg-emerald-500/10 blur-[120px]" />
+        <div className="animate-orb-2 absolute top-[40%] right-[-10%] w-[500px] h-[500px] rounded-full bg-indigo-500/10 blur-[120px]" />
+        <div className="animate-orb-1 absolute bottom-[5%] left-[25%] w-[450px] h-[450px] rounded-full bg-sky-500/10 blur-[120px]" />
+      </div>
+
       {/* Confetti canvas */}
       <canvas
         ref={canvasRef}
@@ -210,7 +267,7 @@ const DashboardPage = () => {
         style={{ width: "100%", height: "100%" }}
       />
  
-      <div className="container mx-auto px-4 max-w-5xl">
+      <div className="container mx-auto px-4 max-w-5xl relative z-10">
         {/* ── Saturday Weekly Test Banner ── */}
         <AnimatePresence>
           {isSaturday && (
@@ -220,20 +277,23 @@ const DashboardPage = () => {
               exit={{ opacity: 0, height: 0, marginBottom: 0 }}
               className="overflow-hidden"
             >
-              <div className="rounded-3xl bg-gradient-to-r from-indigo-600 via-cyan-600 to-blue-600 p-[2px] shadow-xl shadow-cyan-500/20">
+              <div className="rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 p-[2px] shadow-xl shadow-blue-500/20">
                 <div className="bg-background/95 backdrop-blur-xl rounded-[22px] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
                   <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-500 shrink-0">
-
+                    <motion.div 
+                      whileHover={{ scale: 1.08, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                      className="h-16 w-16 rounded-2xl bg-blue-500/15 flex items-center justify-center text-blue-400 shrink-0"
+                    >
                       <Sparkles size={32} />
-                    </div>
+                    </motion.div>
                     <div>
                       <h2 className="text-2xl font-bold mb-1">Saturday Mastery Test is Live! 🚀</h2>
                       <p className="text-muted-foreground">It's time to validate everything you've learned this week. Ready for the challenge?</p>
                     </div>
                   </div>
                   <Link to="/weekly-test" className="w-full sm:w-auto">
-                    <Button variant="hero" size="lg" className="rounded-xl px-10 w-full">
+                    <Button variant="hero" size="lg" className="rounded-xl px-10 w-full shadow-lg shadow-blue-500/20">
                       Start Test
                     </Button>
                   </Link>
@@ -250,31 +310,35 @@ const DashboardPage = () => {
           className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4"
         >
           <div>
-            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight leading-tight">
-              Welcome back, {user.name}! 👋
+            <div className="flex items-center gap-2 text-xs font-semibold text-blue-400 uppercase tracking-widest mb-1">
+              <span className="h-2 w-2 rounded-full bg-blue-500 animate-ping" /> Active Roadmap
+            </div>
+            <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-foreground">
+              {roadmap.title}
             </h1>
-            <p className="mt-1 text-muted-foreground text-base sm:text-lg">{roadmap.title}</p>
           </div>
-          <Link to="/chat" className="shrink-0">
-            <Button variant="outline" className="rounded-xl border-2 hover:bg-slate-50 gap-2 w-full sm:w-auto">
-              <MessageSquare className="h-4 w-4" /> Message AI Mentor
-            </Button>
+          <Link to="/chat">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button size="sm" className="rounded-xl font-bold gap-2 shadow-lg shadow-blue-500/20">
+                <MessageSquare className="h-4 w-4" /> Ask AI Mentor
+              </Button>
+            </motion.div>
           </Link>
         </motion.div>
- 
+
         {/* ── Stats Grid ── */}
-        <div className="mb-8 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {stats.map((s, i) => (
             <motion.div
               key={s.label}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08, type: "spring", stiffness: 200, damping: 20 }}
-              whileHover={{ y: -3, transition: { duration: 0.15 } }}
-              className="rounded-2xl border bg-card p-4 sm:p-5 shadow-sm group hover:border-primary/40 hover:shadow-md transition-all cursor-pointer"
+              whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.2 } }}
+              className="rounded-2xl border border-border bg-card/80 backdrop-blur-xl p-4 sm:p-5 shadow-sm group hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 transition-all cursor-pointer"
               onClick={() => s.link && navigate(s.link)}
             >
-              <div className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${s.gradient}`}>
+              <div className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${s.gradient} shadow-md group-hover:scale-110 transition-transform`}>
                 <s.icon className="h-5 w-5 text-white" />
               </div>
               <div className="text-xl sm:text-2xl font-bold font-display">{s.value}</div>
@@ -419,10 +483,11 @@ const DashboardPage = () => {
               {filteredMonths.map((month, mIdx) => (
                 <motion.div
                   key={month.month}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-30px" }}
                   exit={{ opacity: 0, y: -8 }}
-                  transition={{ delay: mIdx * 0.05 }}
+                  transition={{ delay: mIdx * 0.05, duration: 0.5 }}
                   className="space-y-3"
                 >
                   {/* Month heading */}
@@ -443,9 +508,10 @@ const DashboardPage = () => {
                         <motion.div
                           key={topic.title}
                           layout
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: tIdx * 0.04 }}
+                          initial={{ opacity: 0, x: -15 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true, margin: "-20px" }}
+                          transition={{ delay: tIdx * 0.04, duration: 0.4 }}
                           className={`group flex items-start gap-3 sm:gap-4 rounded-2xl border p-4 sm:p-5 transition-all ${
                             done
                               ? "border-primary/20 bg-primary/5"

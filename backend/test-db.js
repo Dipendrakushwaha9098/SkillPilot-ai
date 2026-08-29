@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 

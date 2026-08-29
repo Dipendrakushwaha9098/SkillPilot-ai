@@ -1,0 +1,322 @@
+{
+  "mem_1787308437483_sxvrmkxw8": {
+    "_id": "mem_1787308437483_sxvrmkxw8",
+    "name": "Hitendra Panwar",
+    "email": "harshdeeppawar738@gmail.com",
+    "password": "$2b$10$pN2AsAOZxEAQnMIdfZmnceH2JHvjl5SGEEgnA33Rky9gwyTQeUECK",
+    "verificationToken": "8e46cfca80f2ac703eca24ff17bf6f8fad9763bdc502eaf98fef2b5904b49c5a",
+    "verificationTokenExpires": 1787394837482,
+    "isVerified": true,
+    "skillLevel": "Beginner (Foundations)",
+    "interests": [
+      "Resume, Portfolio & Mock Interview Coaching"
+    ],
+    "goals": "dont know",
+    "dailyStudyTime": 3,
+    "assessmentCompleted": true,
+    "roadmap": {
+      "title": "Career Launchpad: Comprehensive Resume, Portfolio, and Interview Mastery",
+      "description": "A 3-month intensive journey designed to transform a beginner into a job-ready candidate by mastering the art of self-presentation, digital presence, and high-stakes interview performance.",
+      "months": [
+        {
+          "month": 1,
+          "topics": [
+            {
+              "title": "Resume Architecture and ATS Optimization",
+              "explanation": "Understanding the structure of professional resumes and how to pass automated screening systems.",
+              "notes": [
+                "Reverse-Chronological Format: Listing experiences from most recent to oldest is the industry standard for readability.",
+                "ATS (Applicant Tracking Systems): Software used by recruiters to filter resumes based on keywords and formatting.",
+                "Quantifying Achievements: Using metrics (e.g., 'Increased sales by 20%') instead of just listing duties.",
+                "Contact Information & Professional Summary: Crafting a 3-sentence hook that defines your value proposition immediately.",
+                "Formatting Rules: Avoiding complex graphics, tables, or columns that can confuse ATS parsers."
+              ],
+              "resources": [
+                "https://www.coursera.org/learn/how-to-write-a-resume",
+                "https://www.glassdoor.com/blog/guide/how-to-write-a-resume/"
+              ],
+              "videoLinks": [
+                "https://www.youtube.com/watch?v=Tt08KmFfIYQ"
+              ],
+              "exercises": [
+                "Convert a functional resume into a reverse-chronological format.",
+                "Audit a job description and extract 10 key skills to include in a target resume."
+              ],
+              "quizzes": [
+                {
+                  "question": "In a reverse-chronological resume, which job should be listed first?",
+                  "options": [
+                    "Your first job ever",
+                    "Your most recent or current job",
+                    "The job most relevant to the new role",
+                    "The job you stayed at the longest"
+                  ],
+                  "answer": "Your most recent or current job"
+                },
+                {
+                  "question": "Why should you avoid using tables or images in an ATS-friendly resume?",
+                  "options": [
+                    "They take up too much space",
+                    "Recruiters find them distracting",
+                    "ATS software may fail to parse the text inside them",
+                    "They make the file size too large"
+                  ],
+                  "answer": "ATS software may fail to parse the text inside them"
+                }
+              ]
+            },
+            {
+              "title": "Personal Branding and LinkedIn Strategy",
+              "explanation": "Establishing a professional digital footprint that complements your resume.",
+              "notes": [
+                "LinkedIn Headline: Moving beyond 'Student at University' to a skill-based professional headline.",
+                "The 'About' Section: Writing a narrative-driven summary that highlights career goals and personality.",
+                "Skill Endorsements and Recommendations: Building social proof through peer and mentor validation.",
+                "Engagement Strategy: How to share industry content and comment on posts to increase profile visibility.",
+                "Professional Photography: The impact of a high-quality, approachable headshot on recruiter outreach."
+              ],
+              "resources": [
+                "https://www.linkedin.com/business/learning/blog/career-success/tips-for-creating-a-killer-linkedin-profile",
+                "https://socialmedia.mit.edu/linkedin-guide/"
+              ],
+              "videoLinks": [
+                "https://www.youtube.com/watch?v=y8Yf85390Xw"
+              ],
+              "exercises": [
+                "Write a 150-word LinkedIn 'About' section in the first person.",
+                "Identify 5 industry leaders and engage with their latest posts meaningfully."
+              ],
+              "quizzes": [
+                {
+                  "question": "Which part of a LinkedIn profile is most important for appearing in recruiter searches?",
+                  "options": [
+                    "The Background Image",
+                    "The Headline and Skills section",
+                    "The number of connections",
+                    "The Interests section"
+                  ],
+                  "answer": "The Headline and Skills section"
+                },
+                {
+                  "question": "What is the recommended tone for a LinkedIn 'About' section?",
+                  "options": [
+                    "Extremely formal and third-person",
+                    "Professional yet conversational and first-person",
+                    "Casual and humorous",
+                    "Minimalist with only bullet points"
+                  ],
+                  "answer": "Professional yet conversational and first-person"
+                }
+              ]
+            }
+          ],
+          "project": {
+            "title": "The Master Application Suite",
+            "description": "Create a comprehensive 'Master Resume' containing all possible experiences, a 'Targeted Resume' for a specific job description, and a fully optimized LinkedIn profile including a custom banner and summary."
+          }
+        },
+        {
+          "month": 2,
+          "topics": [
+            {
+              "title": "Portfolio Curation and Storytelling",
+              "explanation": "Selecting and presenting work samples that prove your technical and soft skills.",
+              "notes": [
+                "Selection Criteria: Choosing 3-5 projects that demonstrate a range of capabilities.",
+                "Case Study Format: Explaining the Problem, the Process, and the Result for each project.",
+                "Visual Presentation: Using clean layouts, screenshots, or code snippets to make work accessible.",
+                "Platform Selection: Choosing between GitHub (Dev), Behance (Design), or a personal website (General).",
+                "Proof of Impact: Including testimonials or data that validates the success of your projects."
+              ],
+              "resources": [
+                "https://www.interaction-design.org/literature/article/how-to-build-a-portfolio",
+                "https://career.berkeley.edu/start-exploring/portfolios/"
+              ],
+              "videoLinks": [
+                "https://www.youtube.com/watch?v=5_N7E9U9-Xk"
+              ],
+              "exercises": [
+                "Draft a 'Problem-Solution-Impact' outline for your strongest project.",
+                "Select a hosting platform and set up the basic navigation structure."
+              ],
+              "quizzes": [
+                {
+                  "question": "What is the most important element of a portfolio project description?",
+                  "options": [
+                    "The date it was completed",
+                    "The tools used",
+                    "The narrative of the process and the final result",
+                    "The name of the supervisor"
+                  ],
+                  "answer": "The narrative of the process and the final result"
+                },
+                {
+                  "question": "How many projects are typically recommended for a beginner's portfolio?",
+                  "options": [
+                    "1-2",
+                    "3-5",
+                    "10-15",
+                    "As many as possible"
+                  ],
+                  "answer": "3-5"
+                }
+              ]
+            },
+            {
+              "title": "The STAR Method and Behavioral Interviewing",
+              "explanation": "Mastering the structured technique for answering 'Tell me about a time when...' questions.",
+              "notes": [
+                "Situation: Setting the scene and providing context for your story.",
+                "Task: Explaining the specific challenge or goal you were facing.",
+                "Action: Describing the exact steps YOU took to address the situation (using 'I' not 'we').",
+                "Result: Highlighting the positive outcome, quantified if possible.",
+                "Common Pitfalls: Spending too much time on the Situation and not enough on the Action."
+              ],
+              "resources": [
+                "https://www.themuse.com/advice/star-method-interview-questions",
+                "https://career.mit.edu/interviewing/behavioral-questions"
+              ],
+              "videoLinks": [
+                "https://www.youtube.com/watch?v=W608u69_4S4"
+              ],
+              "exercises": [
+                "Prepare STAR responses for the top 5 behavioral questions (e.g., Conflict, Failure, Leadership).",
+                "Record yourself answering one question and time the 'Action' portion to ensure it is at least 60% of the response."
+              ],
+              "quizzes": [
+                {
+                  "question": "In the STAR method, what does the 'R' stand for?",
+                  "options": [
+                    "Reason",
+                    "Review",
+                    "Result",
+                    "Response"
+                  ],
+                  "answer": "Result"
+                },
+                {
+                  "question": "Which part of the STAR method should receive the most detail and time?",
+                  "options": [
+                    "Situation",
+                    "Task",
+                    "Action",
+                    "Result"
+                  ],
+                  "answer": "Action"
+                }
+              ]
+            }
+          ],
+          "project": {
+            "title": "Digital Portfolio Launch",
+            "description": "Develop a live digital portfolio containing at least three detailed case studies. Each case study must follow the STAR framework and include visual evidence of the work performed."
+          }
+        },
+        {
+          "month": 3,
+          "topics": [
+            {
+              "title": "Interview Psychology and Body Language",
+              "explanation": "Managing nerves and project confidence through non-verbal communication and mindset.",
+              "notes": [
+                "First Impressions: The importance of the 'Entrance' and the first 30 seconds of interaction.",
+                "Active Listening: Using nodding and clarifying questions to show engagement.",
+                "Virtual Interview Etiquette: Lighting, background, and maintaining eye contact with the camera.",
+                "Handling Stress: Techniques for pausing and thinking before answering difficult questions.",
+                "Confidence vs. Arrogance: Striking the right balance when discussing achievements."
+              ],
+              "resources": [
+                "https://www.forbes.com/sites/jacquelynsmith/2013/03/11/10-body-language-tips-for-your-next-job-interview/",
+                "https://www.psychologytoday.com/us/blog/the-image-professor/201701/the-psychology-the-job-interview"
+              ],
+              "videoLinks": [
+                "https://www.youtube.com/watch?v=PCWVi5pAa30"
+              ],
+              "exercises": [
+                "Conduct a 'Power Pose' session before a practice call to boost confidence.",
+                "Practice an 'Eye Contact' drill by looking at the webcam lens specifically while speaking."
+              ],
+              "quizzes": [
+                {
+                  "question": "Where should you look during a virtual interview to simulate eye contact?",
+                  "options": [
+                    "At the interviewer's face on the screen",
+                    "At your own image",
+                    "Directly into the computer's camera lens",
+                    "At your keyboard"
+                  ],
+                  "answer": "Directly into the computer's camera lens"
+                },
+                {
+                  "question": "If you are asked a question you don't know the answer to, what is the best approach?",
+                  "options": [
+                    "Make up an answer quickly",
+                    "Stay silent until they move on",
+                    "Acknowledge the question, explain your thought process, and relate it to what you do know",
+                    "Say 'I don't know' and stop talking"
+                  ],
+                  "answer": "Acknowledge the question, explain your thought process, and relate it to what you do know"
+                }
+              ]
+            },
+            {
+              "title": "Mock Interview Mastery and Negotiation",
+              "explanation": "Simulating the full interview experience and learning to handle job offers.",
+              "notes": [
+                "The 'Elevator Pitch': Perfecting the 'Tell me about yourself' response in under 90 seconds.",
+                "Asking Reverse Questions: Preparing high-level questions for the interviewer to show interest.",
+                "Salary Negotiation: Researching market rates and deferring salary talk until an offer is made.",
+                "Post-Interview Follow-up: Writing a thank-you email that reinforces your value.",
+                "Feedback Loops: How to ask for and implement feedback from unsuccessful interviews."
+              ],
+              "resources": [
+                "https://prowess.org.uk/mock-interview-questions/",
+                "https://www.pon.harvard.edu/daily/salary-negotiation/salary-negotiation-strategies-for-success/"
+              ],
+              "videoLinks": [
+                "https://www.youtube.com/watch?v=kayOhGR7GeE"
+              ],
+              "exercises": [
+                "Record a 20-minute mock interview with a peer or using an AI tool.",
+                "Draft a template for a post-interview thank-you note that references a specific conversation point."
+              ],
+              "quizzes": [
+                {
+                  "question": "What is the primary purpose of asking the interviewer questions at the end?",
+                  "options": [
+                    "To show you were listening",
+                    "To prove you did research and are genuinely interested in the company culture",
+                    "To make the interview last longer",
+                    "To find out how much you will get paid"
+                  ],
+                  "answer": "To prove you did research and are genuinely interested in the company culture"
+                },
+                {
+                  "question": "When is the best time to negotiate your salary?",
+                  "options": [
+                    "During the first phone screen",
+                    "After you have received a formal job offer",
+                    "Immediately after the first interview",
+                    "In the thank-you email"
+                  ],
+                  "answer": "After you have received a formal job offer"
+                }
+              ]
+            }
+          ],
+          "project": {
+            "title": "The Final Simulation",
+            "description": "Complete a 3nd-party mock interview (via platform or mentor). Review the recording, write a 500-word self-critique identifying three areas of improvement, and update your 'Interview Cheat Sheet' with refined STAR stories."
+          }
+        }
+      ]
+    },
+    "progress": {
+      "completedLessons": [],
+      "quizResults": [],
+      "streak": 0,
+      "lastActive": "2026-08-21T10:33:57.790Z"
+    },
+    "createdAt": "2026-08-21T10:33:57.790Z"
+  }
+}

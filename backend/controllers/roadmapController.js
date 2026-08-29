@@ -1,5 +1,5 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const User = require("../models/User");
+const userStore = require("../utils/userStore");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -24,8 +24,8 @@ const generateFallbackRoadmap = (skillLevel, interests) => {
               "Review concepts regularly."
             ],
             resources: [
-              "https://developer.mozilla.org",
-              "https://freecodecamp.org"
+              "https://www.geeksforgeeks.org/learn-web-development/",
+              "https://www.geeksforgeeks.org/fundamentals-of-algorithms/"
             ],
             videoLinks: [
               "https://www.youtube.com/results?search_query=programming+basics"
@@ -82,27 +82,31 @@ exports.generateRoadmap = async (req, res) => {
     });
 
     const prompt = `
-You are an expert tech mentor. Your task is to generate a comprehensive, personalized 3-month learning roadmap for a student.
+You are an Omni-Subject Academic & Technical Architect conditioned across all fields of human knowledge (STEM, Medicine, Business, Humanities, Law, Languages, Competitive Exams, and Technology). Your task is to generate a comprehensive, personalized 3-month learning roadmap for a student in ANY subject area.
 
 STUDENT PROFILE:
+- Student Category / Background: ${req.body.studentCategory || "Student / Learner"}
+- Target Subject(s): ${interestsText}
 - Skill Level: ${skillLevel}
-- Interests: ${interestsText}
-- Professional Goals: ${goals}
+- Learning / Career Goals: ${goals}
 - Daily Study Commitment: ${dailyStudyTime} hours
-${req.body.assessmentResults ? `- Assessment Results: ${JSON.stringify(req.body.assessmentResults)}` : ''}
+${req.body.assessmentResults ? `- Diagnostic Assessment Results: ${JSON.stringify(req.body.assessmentResults)}` : ''}
 
 INSTRUCTIONS:
-1. Create a structured roadmap for 3 months.
-2. Each month should have specific topics and a final project.
+1. Create a structured 3-month Learning Roadmap tailored to the exact discipline requested.
+2. Structure the curriculum logically:
+   - Month 1: Fundamentals, Core Principles & Foundation Concepts.
+   - Month 2: Intermediate Applications, Practical Problem Solving, Formulas/Code/Calculations, & Deep Concepts.
+   - Month 3: Advanced Mastery, Real-World Projects/Case Studies, Mock Exams, and Execution.
 3. For each topic, provide deep, structured study notes (at least 5 bullet points).
-4. Include 2 relevant resource links and 1 video link per topic.
-5. Provide 2 multiple-choice questions per topic for self-assessment.
-6. Address the gaps identified in the assessment results.
+4. Include 2 high-quality educational resource links per topic (Khan Academy, MIT OpenCourseWare, GeeksforGeeks, Coursera, YouTube, Britannica, etc.).
+5. Include a hands-on Milestone Project, Case Study, or Practice Set for each month.
+6. Provide 2 multiple-choice questions per topic for self-assessment.
 
 RESPONSE FORMAT:
 You MUST return ONLY a valid JSON object following this schema:
 {
-  "title": "A compelling title for the roadmap",
+  "title": "A compelling Roadmap Title tailored to the subject",
   "description": "A high-level summary of the learning journey",
   "months": [
     {
@@ -114,7 +118,7 @@ You MUST return ONLY a valid JSON object following this schema:
           "notes": ["Detailed point 1", "Detailed point 2", "Detailed point 3", "Detailed point 4", "Detailed point 5"],
           "resources": ["URL 1", "URL 2"],
           "videoLinks": ["YouTube URL"],
-          "exercises": ["Hands-on exercise 1", "Hands-on exercise 2"],
+          "exercises": ["Hands-on exercise / problem 1", "Hands-on task 2"],
           "quizzes": [
             {
               "question": "Question text",
@@ -125,8 +129,8 @@ You MUST return ONLY a valid JSON object following this schema:
         }
       ],
       "project": {
-        "title": "Month Project Title",
-        "description": "Project description and goals"
+        "title": "Month Milestone Title (Project / Case Study / Practice Exam)",
+        "description": "Milestone description, deliverables, and goals"
       }
     }
   ]
@@ -159,7 +163,7 @@ You MUST return ONLY a valid JSON object following this schema:
 
     console.log("Roadmap generated:", roadmap.title);
 
-    const user = await User.findById(req.user._id);
+    const user = await userStore.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({
@@ -206,7 +210,7 @@ exports.getRoadmap = async (req, res) => {
       });
     }
 
-    const user = await User.findById(req.user._id);
+    const user = await userStore.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({
@@ -238,9 +242,9 @@ exports.generateAssessmentQuestions = async (req, res) => {
     const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
     const prompt = `
-You are an expert tech recruiter and mentor.
+You are an expert educator, professor, and assessment specialist.
 Generate 5 multiple choice questions to assess a student's knowledge in: ${interestsText}.
-The questions should be appropriate for a ${skillLevel} level.
+The questions should be appropriate for a ${skillLevel} level student.
 
 Return ONLY JSON in this format:
 [
@@ -275,7 +279,7 @@ Return ONLY JSON. No markdown.
 // ===== GENERATE WEEKLY TEST =====
 exports.generateWeeklyTest = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await userStore.findById(req.user._id);
     if (!user || !user.roadmap || !user.roadmap.months) {
       return res.status(400).json({ message: "No roadmap found for weekly test" });
     }
@@ -295,7 +299,7 @@ exports.generateWeeklyTest = async (req, res) => {
     const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
     const prompt = `
-You are an expert tech mentor.
+You are an expert AI mentor and academic evaluator.
 Generate a "Weekly Assessment" for a student studying: ${topicsText}.
 The student is currently in Week ${currentWeek} of their learning journey.
 

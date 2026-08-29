@@ -35,7 +35,7 @@ import { toast } from "sonner";
  * Custom Markdown Components for a premium look
  */
 const MarkdownComponents = {
-  code({ node, inline, className, children, ...props }: any) {
+  code({ inline, className, children, ...props }: { node?: unknown; inline?: boolean; className?: string; children?: React.ReactNode }) {
     const match = /language-(\w+)/.exec(className || '');
     const codeString = String(children).replace(/\n$/, '');
     
@@ -73,18 +73,18 @@ const MarkdownComponents = {
       </code>
     );
   },
-  h2: ({ children }: any) => (
+  h2: ({ children }: { children?: React.ReactNode }) => (
     <h2 className="mt-10 mb-6 text-2xl font-bold tracking-tight text-foreground border-b border-border pb-2">
       {children}
     </h2>
   ),
-  p: ({ children }: any) => (
+  p: ({ children }: { children?: React.ReactNode }) => (
     <p className="mb-4 leading-relaxed text-muted-foreground/90">
       {children}
     </p>
   ),
-  ul: ({ children }: any) => <ul className="mb-6 space-y-2 list-none">{children}</ul>,
-  li: ({ children }: any) => (
+  ul: ({ children }: { children?: React.ReactNode }) => <ul className="mb-6 space-y-2 list-none">{children}</ul>,
+  li: ({ children }: { children?: React.ReactNode }) => (
     <li className="flex items-start gap-3 text-muted-foreground/90">
       <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
       <span>{children}</span>
@@ -92,12 +92,17 @@ const MarkdownComponents = {
   ),
 };
 
-const TopicHeader = React.memo(({ topic, mMonth }: { topic: any, mMonth: number }) => (
-  <div className="mb-12">
+interface TopicInfo {
+  title: string;
+  explanation: string;
+}
+
+const TopicHeader = React.memo(({ topic, mMonth }: { topic: TopicInfo; mMonth: number }) => (
+  <div id="overview" className="mb-10">
     <motion.div 
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="mb-6 flex items-center justify-between"
+      className="mb-5 flex items-center justify-between"
     >
       <Link to="/dashboard" className="group flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-primary transition-all">
         <div className="flex h-9 w-9 items-center justify-center rounded-full border bg-background/50 backdrop-blur-md group-hover:border-primary/50 group-hover:bg-primary/5 group-hover:scale-110 transition-all">
@@ -119,31 +124,31 @@ const TopicHeader = React.memo(({ topic, mMonth }: { topic: any, mMonth: number 
       <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-primary ring-1 ring-inset ring-primary/20">
         <Sparkles className="h-3 w-3" /> Accelerated Learning
       </div>
-      <h1 className="mb-6 font-display text-5xl font-extrabold tracking-tight md:text-7xl">
+      <h1 className="mb-4 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
         <span className="text-nebula">{topic.title}</span>
       </h1>
-      <div className="prose prose-purple dark:prose-invert max-w-none text-xl leading-relaxed text-muted-foreground/80">
+      <div className="prose prose-purple dark:prose-invert max-w-3xl text-base sm:text-lg leading-relaxed text-muted-foreground/90">
         <ReactMarkdown components={MarkdownComponents}>{topic.explanation}</ReactMarkdown>
       </div>
     </motion.div>
   </div>
 ));
 
-const TopicSidebar = React.memo(({ topic, done, onToggleComplete }: { topic: any, done: boolean, onToggleComplete: () => void }) => (
-  <div className="space-y-6">
+const TopicSidebar = React.memo(({ topic, done, onToggleComplete }: { topic: TopicInfo; done: boolean; onToggleComplete: () => void }) => (
+  <div className="space-y-6 w-full min-w-0">
     {/* Progress Card */}
-    <div className={`relative overflow-hidden rounded-[2rem] border-2 p-8 transition-all duration-500 ${done ? "border-primary/30 bg-primary/5 shadow-[0_0_40px_-15px_rgba(var(--primary),0.3)]" : "border-border bg-card/50 backdrop-blur-md shadow-xl"}`}>
-      <div className="mb-6 flex items-center justify-between">
+    <div className={`relative overflow-hidden rounded-[2rem] border-2 p-6 sm:p-8 transition-all duration-500 ${done ? "border-primary/30 bg-primary/5 shadow-[0_0_40px_-15px_rgba(var(--primary),0.3)]" : "border-border bg-card/50 backdrop-blur-md shadow-xl"}`}>
+      <div className="mb-4 flex items-center justify-between">
         <div className="font-display text-xs font-black uppercase tracking-widest text-muted-foreground">Status</div>
         {done && <Sparkles className="h-4 w-4 text-primary animate-pulse" />}
       </div>
-      <div className="mb-8 flex items-center gap-5">
-         <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.25rem] transition-all duration-500 ${done ? "bg-primary text-white scale-110 shadow-lg shadow-primary/25" : "bg-muted text-muted-foreground"}`}>
-            <CheckCircle2 className="h-8 w-8" />
+      <div className="mb-6 flex items-center gap-4">
+         <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.25rem] transition-all duration-500 ${done ? "bg-primary text-white scale-110 shadow-lg shadow-primary/25" : "bg-muted text-muted-foreground"}`}>
+            <CheckCircle2 className="h-7 w-7" />
          </div>
          <div>
-            <div className="font-display text-xl font-black">{done ? "Completed" : "In Progress"}</div>
-            <div className="text-sm text-muted-foreground">{done ? "Course Mastered" : "Ready to Learn"}</div>
+            <div className="font-display text-lg font-black">{done ? "Completed" : "In Progress"}</div>
+            <div className="text-xs text-muted-foreground">{done ? "Course Mastered" : "Ready to Learn"}</div>
          </div>
       </div>
       <Button
@@ -161,35 +166,47 @@ const TopicSidebar = React.memo(({ topic, done, onToggleComplete }: { topic: any
     </div>
 
     {/* Resources Glass Card */}
-    <div className="glass rounded-[2rem] border border-white/20 p-8 shadow-2xl dark:glass-dark">
-      <h3 className="mb-6 flex items-center gap-3 font-display text-xs font-black uppercase tracking-widest text-muted-foreground">
-        <BookOpen className="h-4 w-4 text-primary" /> Curated Resources
+    <div id="resources" className="glass rounded-[2rem] border border-white/20 p-6 shadow-2xl dark:glass-dark w-full overflow-hidden">
+      <h3 className="mb-4 flex items-center gap-2.5 font-display text-xs font-black uppercase tracking-widest text-emerald-400">
+        <BookOpen className="h-4 w-4 text-emerald-400 shrink-0" /> GeeksforGeeks Resources
       </h3>
-      <div className="grid gap-3">
-        {topic.resources.map((r: string, i: number) => (
-          <a 
-            key={i} 
-            href={r} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="group flex items-start gap-4 rounded-2xl border border-border/50 bg-background/40 p-4 transition-all hover:border-primary/40 hover:bg-primary/5 hover:scale-[1.02] active:scale-95"
-          >
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-muted group-hover:bg-primary/10 transition-colors">
-              <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-            </div>
-            <span className="text-sm font-medium leading-snug text-muted-foreground group-hover:text-foreground line-clamp-2">{r}</span>
-          </a>
-        ))}
+      <div className="flex flex-col gap-3 w-full min-w-0">
+        {topic.resources.map((r: string, i: number) => {
+          const isGfg = r.includes("geeksforgeeks.org");
+          const targetUrl = isGfg ? r : `https://www.geeksforgeeks.org/search/?q=${encodeURIComponent(topic.title)}`;
+          return (
+            <a 
+              key={i} 
+              href={targetUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="group flex items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3.5 transition-all hover:border-emerald-500/40 hover:bg-emerald-500/10 active:scale-[0.98] w-full min-w-0 overflow-hidden"
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 group-hover:bg-emerald-500/25 transition-colors">
+                <ExternalLink className="h-4 w-4" />
+              </div>
+              <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
+                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider truncate">GeeksforGeeks</span>
+                <span className="text-xs font-semibold text-foreground/90 group-hover:text-emerald-400 transition-colors truncate">
+                  GeeksforGeeks Guide #{i + 1}
+                </span>
+                <span className="text-[11px] text-muted-foreground/60 truncate font-mono mt-0.5">
+                  geeksforgeeks.org
+                </span>
+              </div>
+            </a>
+          );
+        })}
       </div>
     </div>
 
     {/* AI Mentor Sticky CTA */}
-    <div className="group relative overflow-hidden rounded-[2.5rem] border-2 border-primary/20 bg-gradient-to-br from-primary/10 via-background to-accent/10 p-8 shadow-xl">
+    <div className="group relative overflow-hidden rounded-[2.5rem] border-2 border-primary/20 bg-gradient-to-br from-primary/10 via-background to-accent/10 p-6 sm:p-8 shadow-xl w-full">
       <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/10 blur-3xl transition-all group-hover:bg-primary/20" />
-      <h3 className="mb-4 flex items-center gap-3 font-display text-2xl font-black tracking-tight">
+      <h3 className="mb-3 flex items-center gap-3 font-display text-xl sm:text-2xl font-black tracking-tight">
         <MessageSquare className="h-6 w-6 text-primary" /> AI Mentor
       </h3>
-      <p className="mb-8 text-sm leading-relaxed text-muted-foreground/80">
+      <p className="mb-6 text-xs sm:text-sm leading-relaxed text-muted-foreground/80">
         Stuck on a concept? Ask for a real-world analogy or a deep dive into the code.
       </p>
       <Link to={`/chat?topic=${encodeURIComponent(topic.title)}`}>
@@ -214,6 +231,15 @@ const TopicPage = () => {
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
   const [quizDone, setQuizDone] = useState(false);
+
+  const resetQuiz = () => {
+    setQuizStarted(false);
+    setCurrentQ(0);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setScore(0);
+    setQuizDone(false);
+  };
 
   // Scroll Progress for top bar
   const { scrollYProgress } = useScroll();
@@ -260,18 +286,18 @@ const TopicPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-background selection:bg-primary/30">
+    <div className="relative min-h-screen bg-background bg-grid-pattern bg-radial-gradient selection:bg-primary/30 overflow-hidden">
       {/* Scroll Progress Bar */}
-      <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-primary origin-left z-50" style={{ scaleX }} />
+      <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-emerald-500 origin-left z-50" style={{ scaleX }} />
 
-      {/* Modern Background */}
-      <div className="fixed inset-0 pointer-events-none -z-10">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent/5 blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2" />
+      {/* Modern Ambient Background Glows */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="animate-orb-1 absolute top-0 right-0 w-[800px] h-[800px] bg-emerald-500/10 blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2" />
+        <div className="animate-orb-2 absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-500/10 blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2" />
       </div>
 
-      <div className="container mx-auto max-w-7xl px-4 py-24">
-        <div className="flex flex-col lg:flex-row gap-16">
+      <div className="container mx-auto max-w-7xl px-4 pt-20 pb-16 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           
           {/* LEFT: Table of Contents (Sticky) */}
           <aside className="hidden xl:block w-64 shrink-0">
@@ -280,10 +306,19 @@ const TopicPage = () => {
                 <List className="h-3 w-3" /> Navigation
               </div>
               <nav className="space-y-1">
-                {['Overview', 'Deep Dive Notes', 'Knowledge Check', 'Resources'].map((item) => (
-                  <button key={item} className="flex w-full items-center gap-3 px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-primary transition-all text-left rounded-xl hover:bg-primary/5 group">
+                {[
+                  { name: 'Overview', id: 'overview' },
+                  { name: 'Deep Dive Notes', id: 'notes' },
+                  { name: 'Knowledge Check', id: 'quiz' },
+                  { name: 'Resources', id: 'resources' }
+                ].map((item) => (
+                  <button 
+                    key={item.id} 
+                    onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' })}
+                    className="flex w-full items-center gap-3 px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-primary transition-all text-left rounded-xl hover:bg-primary/5 group"
+                  >
                     <div className="h-1 w-1 rounded-full bg-border group-hover:bg-primary group-hover:scale-150 transition-all" />
-                    {item}
+                    {item.name}
                   </button>
                 ))}
               </nav>

@@ -1,9 +1,9 @@
-const User = require('../models/User');
+const userStore = require('../utils/userStore');
 
 exports.updateProgress = async (req, res) => {
   try {
     const { topicId } = req.body;
-    const user = await User.findById(req.user._id);
+    const user = await userStore.findById(req.user._id);
     
     if (!user.progress.completedLessons.includes(topicId)) {
       user.progress.completedLessons.push(topicId);
@@ -40,7 +40,7 @@ exports.updateProgress = async (req, res) => {
 
 exports.getProgress = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await userStore.findById(req.user._id);
     res.json(user.progress);
   } catch (error) {
     res.status(500).json({ message: error.message });

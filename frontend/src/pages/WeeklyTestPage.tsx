@@ -9,9 +9,15 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../components/ui/button';
 
+interface WeeklyTest {
+  week: number;
+  title: string;
+  questions: { question: string; options: string[]; answer: string }[];
+}
+
 const WeeklyTestPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [test, setTest] = useState<any>(null);
+  const [test, setTest] = useState<WeeklyTest | null>(null);
   const [currentQ, setCurrentQ] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -54,26 +60,26 @@ const WeeklyTestPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
-        <Loader2 className="w-12 h-12 animate-spin text-violet-500 mb-4" />
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground transition-colors duration-300">
+        <Loader2 className="w-12 h-12 animate-spin text-emerald-500 mb-4" />
         <h2 className="text-xl font-bold">Generating Weekly Test...</h2>
-        <p className="text-white/40">Gemini is analyzing your week's progress</p>
+        <p className="text-muted-foreground">Gemini is analyzing your week's progress</p>
       </div>
     );
   }
 
   if (!test || !test.questions) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-6 text-center">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground transition-colors duration-300 p-6 text-center">
         <div className="mb-6 p-4 rounded-full bg-red-500/10 text-red-500">
           <XCircle size={48} />
         </div>
         <h2 className="text-2xl font-bold mb-2">No test available</h2>
-        <p className="text-white/60 mb-8 max-w-md">
+        <p className="text-muted-foreground mb-8 max-w-md">
           We couldn't generate a test for you right now. This might be because your roadmap hasn't been generated yet or it's not Saturday!
         </p>
         <Link to="/dashboard">
-          <Button variant="hero">Return to Dashboard</Button>
+          <Button variant="default">Return to Dashboard</Button>
         </Link>
       </div>
     );
@@ -82,8 +88,14 @@ const WeeklyTestPage: React.FC = () => {
   const currentQuestion = test.questions[currentQ];
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 pb-12 px-6">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-background bg-grid-pattern bg-radial-gradient text-foreground transition-colors duration-300 pt-24 pb-12 px-6 relative overflow-hidden">
+      {/* Background Animated Ambient Orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="animate-orb-1 absolute top-[10%] left-[-5%] w-[550px] h-[550px] rounded-full bg-violet-500/10 blur-[140px]" />
+        <div className="animate-orb-2 absolute bottom-[10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-emerald-500/10 blur-[140px]" />
+      </div>
+
+      <div className="max-w-3xl mx-auto relative z-10">
         
         <AnimatePresence mode="wait">
           {!quizDone ? (
@@ -188,21 +200,21 @@ const WeeklyTestPage: React.FC = () => {
                 <Trophy size={80} />
               </div>
               
-              <h2 className="text-4xl font-bold mb-2">Test Completed!</h2>
-              <p className="text-white/40 mb-12 text-lg">You've finished your Week {test.week} assessment</p>
+              <h2 className="text-4xl font-bold mb-2 text-foreground">Test Completed!</h2>
+              <p className="text-muted-foreground mb-12 text-lg">You've finished your Week {test.week} assessment</p>
 
               <div className="grid grid-cols-2 gap-6 mb-12 max-w-md mx-auto">
-                <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+                <div className="bg-card border border-border rounded-3xl p-8 shadow-sm">
                   <div className="text-4xl font-black text-gradient mb-1">{score}/{test.questions.length}</div>
-                  <div className="text-xs font-bold uppercase tracking-widest text-white/40">Correct Answers</div>
+                  <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Correct Answers</div>
                 </div>
-                <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+                <div className="bg-card border border-border rounded-3xl p-8 shadow-sm">
                   <div className="text-4xl font-black text-gradient mb-1">{Math.round((score / test.questions.length) * 100)}%</div>
-                  <div className="text-xs font-bold uppercase tracking-widest text-white/40">Mastery Level</div>
+                  <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Mastery Level</div>
                 </div>
               </div>
 
-              <p className="text-lg text-white/70 mb-12 max-w-lg mx-auto">
+              <p className="text-lg text-foreground/80 mb-12 max-w-lg mx-auto">
                 {score === test.questions.length 
                   ? "Flawless! You've perfectly mastered this week's concepts. Keep up the amazing work!" 
                   : score >= test.questions.length * 0.7 
